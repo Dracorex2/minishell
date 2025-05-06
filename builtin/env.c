@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/28 16:09:34 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/04/28 17:53:48 by lucmansa         ###   ########.fr       */
+/*   Created: 2025/05/05 16:32:33 by lucmansa          #+#    #+#             */
+/*   Updated: 2025/05/05 16:34:09 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-int main(int argc, char const *argv[])
+int	main(int argc, char **argv, char **env)
 {
-	printf("%s\n", argv[1]);
-	return 0;
+	int	i;
+
+	i = 0;
+	(void)argc;
+	(void)argv;
+	while (env[++i])
+		printf("%s\n", env[i]);
+	return (0);
 }
