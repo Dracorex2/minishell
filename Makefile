@@ -1,21 +1,22 @@
-# Compiler and flags
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-LIBS = -lreadline
-
-# Directories and files
-SRCS = $(wildcard *.c)
-OBJ_DIR = obj
-OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
 NAME = minishell
 
-# Rules
+CFLAGS = -Wall -Wextra -Werror
+SRCS = src/main.c\
+	src/parsing/parsing.c\
+	src/memory/ft_mem.c\
+	src/utils/ft_split.c\
+	src/utils/ft_str_utils.c src/utils/ft_str_utils2.c src/utils/ft_str_utils3.c\
+	src/execution/exec.c
+	
+OBJS = $(SRCS:.c=.o)
+LIBS = -lreadline
+
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	cc $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 
-%.o: %.c
+%.o: %.c minishell.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
@@ -26,4 +27,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+dev: fclean
+	git add *; git commit -m "dev"; git push;
+
+.PHONY: all clean fclean re dev

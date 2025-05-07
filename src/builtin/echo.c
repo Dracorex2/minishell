@@ -1,45 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/05 14:49:07 by lucmansa         ###   ########.fr       */
+/*   Created: 2025/04/28 16:09:34 by lucmansa          #+#    #+#             */
+/*   Updated: 2025/05/07 17:28:39 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*typedef enum e_token_type
+#include <stdio.h>
+
+int echo(char **argv)
 {
-	INPUT,
-	HEREDOC,
-	TRUNC,
-	APPEND,
-	PIPE,
-	CMD,
-	ARG,
-}	t_token_type;*/
+	int i = 1;
+	int n = 0;
 
-typedef enum e_token_type
-{
-	CMD,
-	ARG,
-	NONE,
-}	t_token_type;
-
-typedef	struct s_token
-{
-	char			*str;
-	t_token_type	type;
-	int				ind;
-}	t_token;
-
-typedef struct s_minishell
-{
-	char	*line;
-	t_token	*tokens;
-}	t_minishell;
-
-
-size_t	ft_strlen(const char *str);
+	if (argv[i] && argv[i][0] == '-' && argv[i][1] == 'n')
+	{
+		n = 1;
+		i++;
+	}
+	while (argv[i])
+	{
+		printf("%s", argv[i]);
+		if (argv[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (!n)
+		printf("\n");
+	return (0);
+}

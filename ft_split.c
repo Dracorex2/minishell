@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:57:06 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/04/28 17:05:13 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:29:13 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	**ft_split(char const *s, char c)
 }
 ///////////////////////////////////////////////////////////////////////
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(char *str)
 {
 	size_t	i;
 
@@ -90,7 +90,7 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, void *src, size_t n)
 {
 	char		*d;
 	char		*s;
@@ -112,7 +112,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*res;
 	size_t	len;
@@ -128,4 +128,19 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		i++;
 	ft_memmove(&res[i], s2, ft_strlen(s2) + 1);
 	return (res);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	c %= 256;
+	while (s[i] != c)
+	{
+		if (s[i] == 0)
+			return (0);
+		i++;
+	}
+	return ((char *)&s[i]);
 }
