@@ -46,6 +46,8 @@ int	main(int argc, char const **argv, char **env)
 	(void)argv;
 	command.env = env;
 
+	command.redirections = malloc(sizeof(t_rdr));
+	command.redirections->ro = "f";
 	ft_minishell(&command);
 	return (0);
 }

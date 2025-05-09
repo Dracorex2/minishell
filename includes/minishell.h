@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/07 16:32:41 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:52:18 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,24 @@
 
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 # include <readline/readline.h>
 # include <readline/history.h>
+
+typedef struct s_redirections
+{
+    char    *ri;
+    char    *ro;
+    char    *aro;
+}    t_rdr;
 
 typedef	struct s_command_line
 {
 	char *cmd;
 	char *args;
 	char **splitted;
+	t_rdr	redirections;
 }	t_command_line;
 
 typedef struct s_minishell
