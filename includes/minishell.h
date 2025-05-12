@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/09 15:52:39 by norabino         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:21:30 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,15 @@ char	**ft_split(char const *str, char c);
 int	ft_handle_redirections(t_minishell *command, char *segment, int cmd_index);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(char *s, int c);
-
+int	ft_strcmp(char *s1, char *s2);
+	
 void launch_exec(t_minishell *minishell);
+
+char	*ft_getenv(char **env, char *var);
+
+int ft_echo(char **argv);
+void	ft_exit(t_minishell *minishell, int nb_cmd);
+void	ft_cd(char **argv, char **env);
+
+void	ft_setenv(char **env, char *name, char *value);
 #endif

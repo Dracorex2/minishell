@@ -6,18 +6,20 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:09:34 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/07 17:28:39 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:27:10 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-int echo(char **argv)
+int ft_echo(char **argv)
 {
 	int i = 1;
 	int n = 0;
 
-	if (argv[i] && argv[i][0] == '-' && argv[i][1] == 'n')
+	if (!argv)
+		return (printf("\n"), 0);
+	while (argv[i] && argv[i][0] == '-' && argv[i][1] == 'n')
 	{
 		n = 1;
 		i++;

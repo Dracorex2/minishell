@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:18:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/09 16:01:33 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:31:10 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void redirect_input(t_minishell *minishell, int nb_cmd)
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 }
+
 void redirect_output(t_minishell *minishell, int nb_cmd)
 {
 	int fd;
@@ -58,32 +59,58 @@ void redirect_output(t_minishell *minishell, int nb_cmd)
 	close(fd);
 }
 
+int execute_builtins(t_minishell *minishell, int nb_cmd)
+{
+	char	*cmd;
+	char	**args;
+	char	**env;
+
+	cmd = minishell->command_line[nb_cmd].cmd;
+	args = minishell->command_line[nb_cmd].splitted;
+	env = minishell->env;
+	if (ft_strcmp(cmd, "cd") == 0)
+		return(ft_cd(args, env), 1);
+	//else if (ft_strcmp(cmd, "pwd") == 0)
+	//	return(ft_pwd(), 1);
+	//else if (ft_strcmp(cmd, "export") == 0)
+	//	return(ft_export(args, env), 1);
+	//else if (ft_strcmp(cmd, "unset") == 0)
+	//	return(ft_unset(args, env), 1);
+	//else if (ft_strcmp(cmd, "env") == 0)
+	//	return(ft_env(args, env), 1);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		return(ft_exit(minishell, nb_cmd), 1);
+	else if (ft_strcmp(cmd, "echo") == 0)
+		return(ft_echo(args), 1);
+	else
+		return (0);
+}
+
 void	execute_command(char *cmd, t_minishell *minishell, int nb_cmd)
 {
 	if (execve(cmd, (char * const*)minishell->command_line[nb_cmd].splitted, minishell->env) == -1)
 		exit(-1);
 }
 
-void	search_command(t_minishell *minishell, int nb_cmd) 
+char	*search_command(t_minishell *minishell, int nb_cmd) 
 {
 	char	**path;
 	int		i;
 	char	*cmd;
 
-//	if (builtins(minishell.cmd))
-//		return (execute_builtins(minishell.cmd, minishell.args, minishell.env));
 	if (ft_strchr(minishell->command_line[nb_cmd].cmd, '/') && access(minishell->command_line[nb_cmd].cmd, X_OK) == 0)
-		return (execute_command(minishell->command_line[nb_cmd].cmd, minishell, nb_cmd));
+		return (minishell->command_line[nb_cmd].cmd);
 	path = ft_split(ft_getenv(minishell->env, "PATH"), ':');
 	i = -1;
 	while (path[++i])
 	{
 		cmd = ft_strjoin(ft_strjoin(path[i], "/"), minishell->command_line[nb_cmd].cmd);
 		if (access(cmd, X_OK) == 0)
-			return (execute_command(cmd, minishell, nb_cmd), free(cmd));
+			return (ft_free_split(path), cmd);
+		free(cmd);
 	}
-	free(cmd);
-	printf("%s: command not found\n", minishell->command_line[nb_cmd].cmd);
+	ft_free_split(path);
+	return (NULL);
 }
 
 void wait_all_pid(int *pid, int nb_cmd)
@@ -169,14 +196,25 @@ void	cleanup_pipes(int **pipes, int nb_pipes)
 
 void	execute_child(t_minishell *minishell, int **pipes, int i)
 {
-	setup_child_pipes(minishell, pipes, i);
-	if (minishell->command_line[i].redirect.aro || 
-		minishell->command_line[i].redirect.ro)
-		redirect_output(minishell, i);
-	if (minishell->command_line[i].redirect.ri)
-		redirect_input(minishell, i);
-	search_command(minishell, i);
-	exit(EXIT_FAILURE);
+	char *cmdchr;
+
+	cmdchr = search_command(minishell, i);
+	if (!cmdchr)
+	{
+		printf("Command not found: %s\n", minishell->command_line[i].cmd);
+		free(cmdchr);
+		exit(0);
+	}
+	else
+	{
+		setup_child_pipes(minishell, pipes, i);
+		if (minishell->command_line[i].redirect.aro || 
+			minishell->command_line[i].redirect.ro)
+			redirect_output(minishell, i);
+		if (minishell->command_line[i].redirect.ri)
+			redirect_input(minishell, i);
+		execute_command(cmdchr, minishell, i);
+	}
 }
 
 void	launch_exec(t_minishell *minishell)
@@ -190,6 +228,8 @@ void	launch_exec(t_minishell *minishell)
 	i = 0;
 	while (i < minishell->nb_cmd)
 	{
+		if (execute_builtins(minishell, i))
+			return ;
 		pid[i] = fork();
 		if (pid[i] == 0)
 			execute_child(minishell, pipes, i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:55:50 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/07 15:56:05 by norabino         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:25:09 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,14 @@ char	*ft_strchr(char *s, int c)
 		i++;
 	}
 	return (&s[i]);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }
