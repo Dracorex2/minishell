@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:53:10 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/07 16:26:31 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:54:13 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,34 @@ char	*ft_substr(char *s, int start, int len)
 	return (str);
 }
 
+char	*ft_strjoin_char(char *s1, char c)
+{
+	char	*res;
+	size_t	i;
 
+	if (!c)
+		return (exit(1), NULL);
+	i = 0;
+	if (s1)
+		res = (char *)malloc((ft_strlen(s1) + 2) * sizeof(char));
+	else
+		res = (char *)malloc(2 * sizeof(char));
+	if (!res)
+		return (exit(1), NULL);
+	if (s1)
+	{
+		while (s1[i])
+		{
+			res[i] = s1[i];
+			i++;
+		}
+	}
+	res[i] = c;
+	res[i + 1] = '\0';
+	if (s1)
+		free(s1);
+	return (res);
+}
 
 int	ft_count_seps(char *str)
 {

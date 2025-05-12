@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:55:50 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/07 16:31:13 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:56:05 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,6 @@ int	ft_nextpipe(char *line, int last_pipe)
 	while (line[last_pipe] && line[last_pipe] != '|')
 		last_pipe++;
 	return (last_pipe);
-}
-
-char	*ft_strchr(char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	c %= 256;
-	while (s[i] != c)
-	{
-		if (s[i] == 0)
-			return (0);
-		i++;
-	}
-	return ((char *)&s[i]);
 }
 
 static void	*ft_memmove(void *dest, void *src, size_t n)
@@ -56,6 +41,7 @@ static void	*ft_memmove(void *dest, void *src, size_t n)
 	return (dest);
 }
 
+
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*res;
@@ -72,4 +58,20 @@ char	*ft_strjoin(char *s1, char *s2)
 		i++;
 	ft_memmove(&res[i], s2, ft_strlen(s2) + 1);
 	return (res);
+}
+
+
+char	*ft_strchr(char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	c %= 256;
+	while (s[i] != c)
+	{
+		if (s[i] == 0)
+			return (0);
+		i++;
+	}
+	return (&s[i]);
 }

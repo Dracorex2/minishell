@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:54:39 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/07 15:55:33 by norabino         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:17:57 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ int	ft_parse_args_quotes(char *line)
 	// 34 = double quotes
 	// 39 = single quote
 	beg = 0;
-	while (line[beg] && (line[beg] != '"' && line[beg] != 39))
+	while (line[beg] && (line[beg] != 34 && line[beg] != 39))
 		beg++;
 	if (line[beg] != 34 && line[beg] != 39)
-		return (printf("No quotes"), 1);
-	printf("%s", ft_handle_meta_chars(line, beg + 1));
+		return (1);
+	//printf("%s", ft_handle_meta_chars(line, beg + 1));
 	return (0);
 }
 

@@ -1,53 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main->c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student->42->fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:01:06 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/07 16:36:57 by lucmansa         ###   ########->fr       */
+/*   Updated: 2025/05/07 18:19:38 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_minishell(t_minishell *command)
+void	ft_minishell(t_minishell command)
 {
-	
 	while (1)
 	{
-		command->line = readline("$> ");
-		if (!command->line)
+		command.line = readline("$> ");
+		if (!command.line)
 			break ;
-		if (*command->line)
+		if (*command.line)
 		{
-			command->nb_cmd = ft_nbpipes(command->line) + 1;
-			if (!verif_quotes(command->line))
+			command.nb_cmd = ft_nbpipes(command.line) + 1;
+			if (!verif_quotes(command.line))
 			{
-				printf("Error : Open quotes->\n");
+				printf("Error : Open quotes.\n");
 				continue;
 			}
-			ft_parse_commandline(command);
-			ft_print_tokens(command);
-			//ft_parse_args_quotes(command->line);
-			search_command(*command);
+			ft_parse_commandline(&command);
+			ft_print_tokens(&command);
+			//ft_parse_args_quotes(command.line);
+			launch_exec(&command);
 		}
-		free_command_lines(command);
-		free(command->line);
+		free_command_lines(&command);
+		free(command.line);
 	}
 }
 
-int	main(int argc, char const **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	t_minishell	command;
+	t_minishell	minishell;
 
 	(void)argc;
 	(void)argv;
-	command.env = env;
-
-	command.redirections = malloc(sizeof(t_rdr));
-	command.redirections->ro = "f";
-	ft_minishell(&command);
+	minishell.env = env;
+	minishell.command_line = NULL;
+	minishell.line = NULL;
+	minishell.nb_cmd = 0;
+	ft_minishell(minishell);
 	return (0);
 }

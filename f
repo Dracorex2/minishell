@@ -1,0 +1,9 @@
+a
+b
+f
+ft_split.c
+includes
+main.c
+Makefile
+minishell
+src

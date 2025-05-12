@@ -33,57 +33,42 @@ char	*ft_getenv(char **env, char *var)
 	return (NULL);
 }
 
-void redirect_input(t_minishell *minishell)
+void redirect_input(t_minishell *minishell, int nb_cmd)
 {
 	int fd;
 
-		if (minishell->redirections->ri)
-			fd = open(minishell->redirections->ri, O_RDONLY);
+		if (minishell->command_line[nb_cmd].redirect.ri)
+			fd = open(minishell->command_line[nb_cmd].redirect.ri, O_RDONLY);
 		if (fd == -1)
 			exit(-2);
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 }
-void redirect_output(t_minishell *minishell)
+void redirect_output(t_minishell *minishell, int nb_cmd)
 {
 	int fd;
 
-	if (minishell->redirections->aro)
-		fd = open(minishell->redirections->aro, O_WRONLY | O_CREAT | O_APPEND, 0644);	
-	if (minishell->redirections->ro)	
-		fd = open(minishell->redirections->ro, O_WRONLY | O_CREAT | O_TRUNC, 0644);	
+	if (minishell->command_line[nb_cmd].redirect.aro)
+		fd = open(minishell->command_line[nb_cmd].redirect.aro, O_WRONLY | O_CREAT | O_APPEND, 0644);	
+	if (minishell->command_line[nb_cmd].redirect.ro)	
+		fd = open(minishell->command_line[nb_cmd].redirect.ro, O_WRONLY | O_CREAT | O_TRUNC, 0644);	
 	if (fd == -1)	
 		exit(-2);	
 	dup2(fd, STDOUT_FILENO);	
 	close(fd);
 }
 
-void	execute_command(char *cmd, t_minishell *minishell)
+void	execute_command(char *cmd, t_minishell *minishell, int nb_cmd)
 {
-	int pid;
-	int ret;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		if (minishell->redirections->aro || minishell->redirections->ro)
-			redirect_output(minishell);
-		if (minishell->redirections->ri)
-			redirect_input(minishell);
-		if (execve(cmd, (char * const*)minishell->command_line->splitted, minishell->env) == -1)
-			exit(-1);
-	}
-	else
-	{
-		waitpid(pid, &ret, 0);
-		if (ret == -1)
-			printf("Command execution failed\n");
-		if (ret == -2)
-			printf("Files not found\n");
-	}
+	if (minishell->command_line->redirect.aro || minishell->command_line->redirect.ro)
+		redirect_output(minishell, nb_cmd);
+	if (minishell->command_line->redirect.ri)
+		redirect_input(minishell, nb_cmd);
+	if (execve(cmd, (char * const*)minishell->command_line[nb_cmd].splitted, minishell->env) == -1)
+		exit(-1);
 }
 
-void	search_command(t_minishell *minishell)
+void	search_command(t_minishell *minishell, int nb_cmd) 
 {
 	char	**path;
 	int		i;
@@ -91,35 +76,55 @@ void	search_command(t_minishell *minishell)
 
 //	if (builtins(minishell.cmd))
 //		return (execute_builtins(minishell.cmd, minishell.args, minishell.env));
-	if (ft_strchr(minishell->command_line->cmd, '/') && access(minishell->command_line->cmd, X_OK) == 0)
-		return (execute_command(minishell->command_line->cmd, minishell));
+	if (ft_strchr(minishell->command_line[nb_cmd].cmd, '/') && access(minishell->command_line[nb_cmd].cmd, X_OK) == 0)
+		return (execute_command(minishell->command_line[nb_cmd].cmd, minishell, nb_cmd));
 	path = ft_split(ft_getenv(minishell->env, "PATH"), ':');
 	i = -1;
 	while (path[++i])
 	{
-		cmd = ft_strjoin(ft_strjoin(path[i], "/"), minishell->command_line->cmd);
+		cmd = ft_strjoin(ft_strjoin(path[i], "/"), minishell->command_line[nb_cmd].cmd);
 		if (access(cmd, X_OK) == 0)
-			return (execute_command(cmd, minishell), free(cmd));
+			return (execute_command(cmd, minishell, nb_cmd), free(cmd));
 	}
 	free(cmd);
-	printf("%s: command not found\n", minishell->command_line->cmd);
+	printf("%s: command not found\n", minishell->command_line[nb_cmd].cmd);
+}
+
+
+void wait_all_pid(int *pid, int nb_cmd)
+{
+	int i;
+	int status;
+
+	i = 0;
+	while (i < nb_cmd)
+	{
+		waitpid(pid[i], &status, 0);
+		i++;
+	}
+	free(pid);
 }
 
 void launch_exec(t_minishell *minishell)
 {
 	int i;
+	int *pid;
 
 	i = 0;
+	pid = malloc(sizeof(int) * minishell->nb_cmd);
 	while (i < minishell->nb_cmd)
 	{
 		if (minishell->command_line[i].cmd)
 		{
-			search_command(minishell);
-			free(minishell->command_line[i].cmd);
-			free(minishell->command_line[i].args);
-			ft_free_split(minishell->command_line[i].splitted);
+			pid[i] = fork();
+			if (pid[i] == 0)
+			{
+				printf("%s\n", minishell->command_line[i].cmd);
+				search_command(minishell, i);
+			}
+				
 		}
 		i++;
 	}
-
+	wait_all_pid(pid, minishell->nb_cmd);
 }
