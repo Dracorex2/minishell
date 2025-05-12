@@ -28,7 +28,7 @@ void	ft_minishell(t_minishell command)
 				continue;
 			}
 			ft_parse_commandline(&command);
-			ft_print_tokens(&command);
+			//ft_print_tokens(&command);
 			//ft_parse_args_quotes(command.line);
 			launch_exec(&command);
 		}
