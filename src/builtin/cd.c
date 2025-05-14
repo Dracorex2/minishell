@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 19:09:32 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/12 19:18:59 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:22:11 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,33 @@
 
 static void	update_pwd_env(char **env)
 {
-    char	cwd[200];
-    char	*old_pwd;
+	char	cwd[200];
+	char	*old_pwd;
 
-    old_pwd = ft_getenv(env, "PWD");
-    if (old_pwd)
-        ft_setenv(env, "OLDPWD", old_pwd);
-    if (getcwd(cwd, 200))
-        ft_setenv(env, "PWD", cwd);
+	old_pwd = ft_getenv(env, "PWD");
+	if (old_pwd)
+		ft_setenv(env, "OLDPWD", old_pwd);
+	if (getcwd(cwd, 200))
+		ft_setenv(env, "PWD", cwd);
 }
 
 void	ft_cd(char **argv, char **env)
 {
-    char	*path;
+	char	*path;
 
-    if (!argv[1])
-    {
-        path = ft_getenv(env, "HOME");
-        if (!path)
-        {
-        	printf("cd: HOME not set\n");
-            return ;
-        }
-    }
-    else
-        path = argv[1];
-    chdir(path);
-    update_pwd_env(env);
+	if (!argv)
+		return ;
+	if (!argv[1])
+	{
+		path = ft_getenv(env, "HOME");
+		if (!path)
+		{
+			printf("cd: HOME not set\n");
+			return ;
+		}
+	}
+	else
+		path = argv[1];
+	chdir(path);
+	update_pwd_env(env);
 }

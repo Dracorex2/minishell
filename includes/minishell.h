@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/12 19:21:30 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/14 19:17:42 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	ft_count_seps(char *str);
 char	*ft_strjoin_char(char *s1, char c);
 char	*ft_substr(char *s, int start, int len);
 int	verif_quotes(char *str);
-int		ft_strlen(char *str);
+
 char	**ft_split(char const *str, char c);
 
 int	ft_handle_redirections(t_minishell *command, char *segment, int cmd_index);
@@ -89,4 +89,37 @@ void	ft_exit(t_minishell *minishell, int nb_cmd);
 void	ft_cd(char **argv, char **env);
 
 void	ft_setenv(char **env, char *name, char *value);
+
+//len_utils
+int		tab_len(char **tab);
+int		ft_strlen(char *str);
+
+int		is_builtin(t_minishell *minishell, int nb_cmd);
+
+//////////////
+void 	exec_cmd(t_minishell *minishell);
+
+void	faild_schr(t_minishell *minishell, int i, char *schr);
+int		execute_builtins(char *cmd, t_minishell *minishell, int nb_cmd);
+//redirect
+void	redirect_input(t_minishell *minishell, int nb_cmd);
+void	redirect_output(t_minishell *minishell, int nb_cmd);
+
+//single
+void	redirect_single(t_minishell *minishell);
+void	exec_single(t_minishell *minishell);
+
+//env
+char **cpy_env(char **env);
+
+//command
+void	execute_command(char *cmd, t_minishell *minishell, int nb_cmd);
+char	*search_command(t_minishell *minishell, int nb_cmd) ;
+
+//memory
+void	*ft_realloc(void *ptr, int old_size, int n_size);
+
+//str_cmp
+int	ft_strncmp(char *s1, char *s2, int n);
+
 #endif

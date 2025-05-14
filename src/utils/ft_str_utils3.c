@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:55:50 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/12 18:25:09 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/14 19:25:33 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,55 +19,34 @@ int	ft_nextpipe(char *line, int last_pipe)
 	return (last_pipe);
 }
 
-static void	*ft_memmove(void *dest, void *src, size_t n)
-{
-	char		*d;
-	char		*s;
-	size_t		i;
-
-	if (n != 0 && src == 0 && dest == 0)
-		return (NULL);
-	d = (char *)dest;
-	s = (char *)src;
-	i = -1;
-	if (src >= dest)
-	{
-		while (++i < n)
-			d[i] = s[i];
-	}
-	else
-		while (n--)
-			d[n] = s[n];
-	return (dest);
-}
-
-
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*res;
-	size_t	len;
+	int		len1;
+	int		len2;
 	int		i;
 
-	i = 0;
-	len = ft_strlen(s1) + ft_strlen(s2);
-	res = malloc(sizeof(char) * len + 1);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	res = malloc(sizeof(char) * (len1 + len2 + 1));
 	if (!res)
 		return (0);
-	ft_memmove(res, s1, ft_strlen(s1) + 1);
-	while (res[i])
-		i++;
-	ft_memmove(&res[i], s2, ft_strlen(s2) + 1);
+	i = -1;
+	while (++i < len1)
+		res[i] = s1[i];
+	i--;
+	while (++i < len1 + len2)
+		res[i] = s2[i - len1];
+	res[i] = '\0';
 	return (res);
 }
-
 
 char	*ft_strchr(char *s, int c)
 {
 	int	i;
 
 	i = 0;
-	c %= 256;
-	while (s[i] != c)
+	while (s[i] != (char)c)
 	{
 		if (s[i] == 0)
 			return (0);
@@ -83,5 +62,19 @@ int	ft_strcmp(char *s1, char *s2)
 	i = 0;
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
+	return (s1[i] - s2[i]);
+}
+
+
+
+int	ft_strncmp(char *s1, char *s2, int n)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && i < n && s1[i])
+		i++;
+	if (i == n)
+		return (0);
 	return (s1[i] - s2[i]);
 }
