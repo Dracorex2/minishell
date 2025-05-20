@@ -6,33 +6,60 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:46:45 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/20 15:00:15 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/20 19:39:34 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-void	setup_pipes(t_minishell *minishell, int ***pipes)
+void	closepipes(t_minishell *minishell, int **pipes)
 {
 	int	i;
 
-	*pipes = malloc(sizeof(int *) * (minishell->nb_cmd - 1));
-	if (!*pipes)
-		exit(EXIT_FAILURE);
-	i = 0;
-	while (i < minishell->nb_cmd - 1)
+	i = -1;
+	while (++i < minishell->nb_cmd)
 	{
-		(*pipes)[i] = malloc(sizeof(int) * 2);
-		if (!(*pipes)[i])
-			exit(EXIT_FAILURE);
-		if (pipe((*pipes)[i]) == -1)
-		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
-		}
-		i++;
+		close(pipes[i][0]);
+		close(pipes[i][1]);
 	}
+}
+
+void setup_pipes(t_minishell *minishell, int ***pipes)
+{
+    int i;
+
+    *pipes = malloc(sizeof(int*) * (minishell->nb_cmd));
+    if (!*pipes)
+        return;
+    i = 0;
+    while (i < minishell->nb_cmd)
+    {
+        (*pipes)[i] = malloc(sizeof(int) * 2);
+        if (pipe((*pipes)[i]) == -1)
+        {
+            perror("pipe");
+            exit(EXIT_FAILURE);
+        }
+        i++;
+    }
+}
+
+void	redirect_multiple(t_minishell *minishell, int **pipes, int idx)
+{
+	if (minishell->command_line[idx].redirect.aro || 
+		minishell->command_line[idx].redirect.ro)
+		redirect_output(minishell, idx);
+	if (minishell->command_line[idx].redirect.ri)
+		redirect_input(minishell, idx);
+	redirect_heredoc(minishell, pipes[idx], idx);
+}
+
+void	redirect_close_pipe(t_minishell *minishell, int **pipes, int idx)
+{
+	if (idx > 0)
+		dup2(pipes[idx - 1][0], STDIN_FILENO);
+	if (idx < minishell->nb_cmd - 1)
+		dup2(pipes[idx][1], STDOUT_FILENO);
 }
 
 void	execute_child(t_minishell *minishell, int **pipes, int idx)
@@ -42,34 +69,68 @@ void	execute_child(t_minishell *minishell, int **pipes, int idx)
 	cmdchr = search_command(minishell, idx);
 	if (!cmdchr)
 		return (faild_schr(minishell, idx, cmdchr));
-	
+	redirect_close_pipe(minishell, pipes, idx);
+	redirect_multiple(minishell, pipes, idx);
+	closepipes(minishell, pipes);
+	execute_command(cmdchr, minishell, idx);
 }
 
-void	close_parent_pipes(int **pipes, int i)
+void	parent_pipes(t_minishell *minishell, int **pipes, int i)
 {
-	close(pipes[i][0]);
-	close(pipes[i][1]);
+	if (minishell->command_line[i].redirect.heredoc)
+		write(pipes[i][1], &minishell->command_line[i].redirect.heredoc,
+			ft_strlen(minishell->command_line[i].redirect.heredoc));
+}
+
+void wait_all_pid(int *pid, int nb_cmd)
+{
+	int i;
+	int status;
+
+	i = 0;
+	while (i < nb_cmd)
+	{
+		waitpid(pid[i], &status, 0);
+		i++;
+	}
+	free(pid);
+}
+
+void	cleanup_pipes(int **pipes, int nb_pipes)
+{
+	int	i;
+
+	if (!pipes)
+		return ;
+	i = 0;
+	while (i < nb_pipes)
+	{
+		if (pipes[i])
+			free(pipes[i]);
+		i++;
+	}
+	free(pipes);
 }
 
 void exec_multiple(t_minishell *minishell)
 {
-	int	i;
-	int	*pid;
-	int	**pipes;
+    int i;
+    int *pid;
+    int **pipes;
 
-	setup_pipes(minishell, &pipes);
-	pid = malloc(sizeof(int) * minishell->nb_cmd);
+    setup_pipes(minishell, &pipes);
+    pid = malloc(sizeof(int) * minishell->nb_cmd);
 	i = 0;
-	while (i < minishell->nb_cmd)
-	{
-		pid[i] = fork();
-		if (pid[i] == 0)
-			execute_child(minishell, pipes, i);
-		else
-			close_parent_pipes(pipes, i);
-		i++;
-	}
-	wait_all_pid(pid, minishell->nb_cmd);
-	cleanup_pipes(pipes, minishell->nb_cmd - 1);
-	free(pid);
+    while (i < minishell->nb_cmd)
+    {
+        pid[i] = fork();
+        if (pid[i] == 0)
+            execute_child(minishell, pipes, i);
+        else
+            parent_pipes(minishell, pipes, i);
+        i++;
+    }
+	closepipes(minishell, pipes);
+    wait_all_pid(pid, minishell->nb_cmd);
+    cleanup_pipes(pipes, minishell->nb_cmd - 1);
 }

@@ -6,22 +6,11 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:26:09 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/20 14:47:09 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:43:05 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	redirect_heardoc(t_minishell *minishell, int pipes[2])
-{
-	if (minishell->command_line[0].redirect.heredoc)
-	{
-		dup2(pipes[0], STDIN_FILENO);
-	}
-	close(pipes[0]);
-	close(pipes[1]);
-	return ;
-}
 
 void	default_redirect(t_minishell *minishell, int d_i_o[2], int p[2], int i)
 {
@@ -71,7 +60,7 @@ void exec_single(t_minishell *minishell)
 		pid = fork();
 		if (pid == 0)
 		{
-			redirect_heardoc(minishell, pipes);
+			redirect_heredoc(minishell, pipes, 0);
 			execute_command(cmdchr, minishell, 0);
 		}
 		else

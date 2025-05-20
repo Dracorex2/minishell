@@ -6,6 +6,7 @@ SRCS = src/main.c\
 	src/execution/exec.c\
 	src/execution/command.c\
 	src/execution/exec_single.c\
+	src/execution/exec_multiple.c\
 	src/execution/redirection.c\
 	src/memory/ft_mem.c\
 	src/utils/ft_split.c\

@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/20 15:33:23 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:29:59 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,14 @@ int		execute_builtins(char *cmd, t_minishell *minishell, int nb_cmd);
 //redirect
 void	redirect_input(t_minishell *minishell, int idx);
 void	redirect_output(t_minishell *minishell, int idx);
+void	redirect_heredoc(t_minishell *minishell, int pipes[2], int ixd);
 
 //single
 void	redirect_single(t_minishell *minishell);
 void	exec_single(t_minishell *minishell);
+
+//multiple
+void exec_multiple(t_minishell *minishell);
 
 //env
 char **cpy_env(char **env);
@@ -128,8 +132,8 @@ void	rm_var_env(char **env, char *name);
 void	set_var_env(char **env, char *name, char *value);
 
 //command
-void	execute_command(char *cmd, t_minishell *minishell, int nb_cmd);
-char	*search_command(t_minishell *minishell, int nb_cmd) ;
+void	execute_command(char *cmd, t_minishell *minishell, int idx);
+char	*search_command(t_minishell *minishell, int idx) ;
 
 //memory
 void	*ft_realloc(void *ptr, int old_size, int n_size);

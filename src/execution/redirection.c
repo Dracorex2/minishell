@@ -6,11 +6,23 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:29:36 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/16 18:32:01 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:50:19 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	redirect_heredoc(t_minishell *minishell, int pipes[2], int ixd)
+{
+	if (minishell->command_line[ixd].redirect.heredoc)
+	{
+		close(dup(STDIN_FILENO));
+		dup2(pipes[0], STDIN_FILENO);
+	}
+	close(pipes[0]);
+	close(pipes[1]);
+	return ;
+}
 
 void redirect_output(t_minishell *minishell, int idx)
 {
