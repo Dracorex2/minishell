@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 19:09:32 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/13 15:22:11 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/15 17:06:16 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,29 @@ static void	update_pwd_env(char **env)
 
 	old_pwd = ft_getenv(env, "PWD");
 	if (old_pwd)
-		ft_setenv(env, "OLDPWD", old_pwd);
+		set_var_env(env, "OLDPWD", old_pwd);
 	if (getcwd(cwd, 200))
-		ft_setenv(env, "PWD", cwd);
+		set_var_env(env, "PWD", cwd);
 }
 
-void	ft_cd(char **argv, char **env)
+int	ft_cd(char **argv, char **env)
 {
 	char	*path;
 
 	if (!argv)
-		return ;
+		return (0);
 	if (!argv[1])
 	{
 		path = ft_getenv(env, "HOME");
 		if (!path)
 		{
 			printf("cd: HOME not set\n");
-			return ;
+			return (0);
 		}
 	}
 	else
 		path = argv[1];
 	chdir(path);
 	update_pwd_env(env);
+	return (0);
 }

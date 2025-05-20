@@ -4,6 +4,7 @@
 		"stdio.h": "c",
 		"wait.h": "c",
 		"readline.h": "c",
-		"cstdlib": "c"
+		"cstdlib": "c",
+		"minishell.h": "c"
 	}
 }

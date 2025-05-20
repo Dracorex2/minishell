@@ -6,19 +6,19 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:32:33 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/05 16:34:09 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:26:57 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-int	main(int argc, char **argv, char **env)
+int	ft_env(char **env)
 {
 	int	i;
 
-	i = 0;
-	(void)argc;
-	(void)argv;
+	i = -1;
+	if (!env)
+		return (-1);
 	while (env[++i])
 		printf("%s\n", env[i]);
 	return (0);

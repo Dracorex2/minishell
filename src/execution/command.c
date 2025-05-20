@@ -6,11 +6,17 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 15:40:28 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/14 15:41:52 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:26:01 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	faild_schr(t_minishell *minishell, int i, char *schr)
+{
+		printf("Command not found: %s\n", minishell->command_line[i].cmd);
+		free(schr);
+}
 
 char	*search_command(t_minishell *minishell, int nb_cmd) 
 {
@@ -38,7 +44,7 @@ char	*search_command(t_minishell *minishell, int nb_cmd)
 void	execute_command(char *cmd, t_minishell *minishell, int nb_cmd)
 {
 	if (execve(cmd,
-		(char * const*)minishell->command_line[nb_cmd].splitted,
+		(char * const*)minishell->command_line[nb_cmd].args,
 		minishell->env) == -1)
 		exit(-1);
 }

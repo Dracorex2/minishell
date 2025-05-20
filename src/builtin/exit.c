@@ -6,11 +6,11 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 18:13:07 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/12 18:43:03 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:33:24 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 int	ft_isdigit(int c)
 {
@@ -58,9 +58,9 @@ void	ft_exit_args(char **argv)
 
 void	ft_exit(t_minishell *minishell, int nb_cmd)
 {
-	if (minishell->command_line[nb_cmd].splitted)
+	if (minishell->command_line[nb_cmd].args)
 	{
-		ft_exit_args(minishell->command_line[nb_cmd].splitted);
+		ft_exit_args(minishell->command_line[nb_cmd].args);
 	}
 	else
 		exit(0);

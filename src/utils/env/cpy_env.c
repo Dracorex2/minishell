@@ -6,23 +6,11 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:51:28 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/14 17:10:16 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:51:41 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	tab_len(char **tab)
-{
-	int	i;
-
-	i = 0;
-	if (!tab)
-		return (i);
-	while (tab[i])
-		i++;
-	return (i);
-}
 
 char **cpy_env(char **env)
 {
