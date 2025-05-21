@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:46:45 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/20 19:39:34 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:52:17 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ void	execute_child(t_minishell *minishell, int **pipes, int idx)
 	redirect_close_pipe(minishell, pipes, idx);
 	redirect_multiple(minishell, pipes, idx);
 	closepipes(minishell, pipes);
-	execute_command(cmdchr, minishell, idx);
+	if (!execute_builtins(cmdchr, minishell, idx))
+		execute_command(cmdchr, minishell, idx);
+	exit(0);
 }
 
 void	parent_pipes(t_minishell *minishell, int **pipes, int i)
