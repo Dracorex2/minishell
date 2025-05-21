@@ -6,62 +6,45 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 18:13:07 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/20 15:33:24 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:17:38 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdint.h>
 
-int	ft_isdigit(int c)
+void	exiting(t_minishell *minishell, int value)
 {
-	return (c >= '0' && c <= '9');
+	free_command_lines(minishell);
+	exit(value);
 }
 
-int	ft_atoi(const char *nptr)
+static int	ft_exitnoarg(t_minishell *minishell)
 {
-	int	nbr;
-	int	i;
-	int	sign;
-
-	nbr = 0;
-	i = 0;
-	sign = 1;
-	while (nptr[i] == ' ' || (nptr[i] >= '\t' && nptr[i] <= '\r'))
-		i++;
-	if (nptr[i] == '-' || nptr[i] == '+')
-		if (nptr[i++] == '-')
-			sign *= -1;
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-		nbr = nbr * 10 + (nptr[i++] - '0');
-	return (nbr * sign);
+	write(STDERR_FILENO, "exit\n", 5);
+	exiting(minishell, 0);
+	return (1);
 }
-void	ft_exit_args(char **argv)
+
+int	ft_exit(t_minishell *minishell, int idx)
 {
-	int	i;
+	int64_t	exit_code;
 
-	i = 0;
-
-	while (argv[1][i])
+	if (!minishell->command_line[idx].args)
+		return (ft_exitnoarg(minishell));
+	else if (tab_len(minishell->command_line[idx].args) == 2)
 	{
-		if (!ft_isdigit(argv[1][i]))
+		if (ft_atoi64(minishell->command_line[idx].args[1], &exit_code))
 		{
-			printf("exit: %s: numeric argument required\n", argv[1]);
-			exit(255);
+			write(STDERR_FILENO, "exit: ", 17);
+			write(STDERR_FILENO, minishell->command_line[idx].args[1], ft_strlen(minishell->command_line[idx].args[1]));
+			write(STDERR_FILENO, ": numeric argument required\n", 28);
+			exit_code = 2;
 		}
-		i++;
+		else
+			write(STDERR_FILENO, "exit\n", 5);
+		exiting(minishell, exit_code % 256);
 	}
-	if (argv[2])
-		printf("exit: too many arguments\n");
-	else
-		exit(ft_atoi(argv[1]));
-}
-
-void	ft_exit(t_minishell *minishell, int nb_cmd)
-{
-	if (minishell->command_line[nb_cmd].args)
-	{
-		ft_exit_args(minishell->command_line[nb_cmd].args);
-	}
-	else
-		exit(0);
+	write(STDERR_FILENO, "exit\nexit: too many arguments\n", 41);
+	return (1);
 }

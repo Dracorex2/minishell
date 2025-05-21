@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/20 18:29:59 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:13:27 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <stdio.h>
+# include <stdint.h>
 
 # include <unistd.h>
 #include <sys/wait.h>
@@ -48,6 +49,7 @@ typedef struct s_minishell
 	char	*line;
 	int		nb_cmd;
 	char	**env;
+	int		rt_val;
 	t_command_line	*command_line;
 }	t_minishell;
 
@@ -95,7 +97,7 @@ void	ft_set_spaces(char *segment, int begin, int length);
 
 //builtins
 int ft_echo(char **argv);
-void	ft_exit(t_minishell *minishell, int nb_cmd);
+int	ft_exit(t_minishell *minishell, int idx);
 int	ft_cd(char **argv, char **env);
 int	ft_unset(t_minishell *minishell);
 int	ft_export(t_minishell *minishell, char **args);
@@ -137,6 +139,9 @@ char	*search_command(t_minishell *minishell, int idx) ;
 
 //memory
 void	*ft_realloc(void *ptr, int old_size, int n_size);
+
+//atoi
+int		ft_atoi64(char *text, int64_t *res);
 
 //str_cmp
 int	ft_strncmp(char *s1, char *s2, int n);

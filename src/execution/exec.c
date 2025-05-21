@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:18:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/20 18:34:54 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:47:55 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,5 @@ void exec_cmd(t_minishell *minishell)
 		exec_single(minishell);
 	else
 		exec_multiple(minishell);
+	printf("return value : %i\n", minishell->rt_val);
 }

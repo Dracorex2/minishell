@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:46:45 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/21 14:52:17 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:51:59 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,15 @@ void	parent_pipes(t_minishell *minishell, int **pipes, int i)
 			ft_strlen(minishell->command_line[i].redirect.heredoc));
 }
 
-void wait_all_pid(int *pid, int nb_cmd)
+void wait_all_pid(int *pid, int nb_cmd, int *ret)
 {
 	int i;
-	int status;
 
 	i = 0;
 	while (i < nb_cmd)
 	{
-		waitpid(pid[i], &status, 0);
+		waitpid(pid[i], ret, 0);
+		*ret = WEXITSTATUS(*ret) %256;
 		i++;
 	}
 	free(pid);
@@ -133,6 +133,6 @@ void exec_multiple(t_minishell *minishell)
         i++;
     }
 	closepipes(minishell, pipes);
-    wait_all_pid(pid, minishell->nb_cmd);
+    wait_all_pid(pid, minishell->nb_cmd, &minishell->rt_val);
     cleanup_pipes(pipes, minishell->nb_cmd - 1);
 }

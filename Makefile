@@ -9,6 +9,7 @@ SRCS = src/main.c\
 	src/execution/exec_multiple.c\
 	src/execution/redirection.c\
 	src/memory/ft_mem.c\
+	src/utils/atoi_error.c\
 	src/utils/ft_split.c\
 	src/utils/len_utils.c\
 	src/utils/memory.c\
