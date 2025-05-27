@@ -6,19 +6,18 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 19:34:52 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/15 18:33:39 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:41:33 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-static void sort_tab_p(char **env, int len)
+static void	sort_tab_p(char **env, int len)
 {
-	int	i;
-	int k;
-	int min;
-	char *tmp;
+	int		i;
+	int		k;
+	int		min;
+	char	*tmp;
 
 	i = -1;
 	while (++i < len)
@@ -40,7 +39,7 @@ static void sort_tab_p(char **env, int len)
 
 int	ft_export(t_minishell *minishell, char **args)
 {
-	char **env_cpy;
+	char	**env_cpy;
 
 	env_cpy = cpy_env(minishell->env);
 	if (!args)

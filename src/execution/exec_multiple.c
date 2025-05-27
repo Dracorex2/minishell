@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:46:45 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/21 15:51:59 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:06:26 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	redirect_close_pipe(t_minishell *minishell, int **pipes, int idx)
 
 void	execute_child(t_minishell *minishell, int **pipes, int idx)
 {
-	char *cmdchr;
+	char 	*cmdchr;
+	int		ret;
 
 	cmdchr = search_command(minishell, idx);
 	if (!cmdchr)
@@ -72,9 +73,10 @@ void	execute_child(t_minishell *minishell, int **pipes, int idx)
 	redirect_close_pipe(minishell, pipes, idx);
 	redirect_multiple(minishell, pipes, idx);
 	closepipes(minishell, pipes);
-	if (!execute_builtins(cmdchr, minishell, idx))
+	ret = execute_builtins(cmdchr, minishell, idx);
+	if (ret == -1)
 		execute_command(cmdchr, minishell, idx);
-	exit(0);
+	exit(ret);
 }
 
 void	parent_pipes(t_minishell *minishell, int **pipes, int i)
@@ -134,5 +136,5 @@ void exec_multiple(t_minishell *minishell)
     }
 	closepipes(minishell, pipes);
     wait_all_pid(pid, minishell->nb_cmd, &minishell->rt_val);
-    cleanup_pipes(pipes, minishell->nb_cmd - 1);
+    cleanup_pipes(pipes, minishell->nb_cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:18:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/21 15:47:55 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:58:58 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	is_builtin(t_minishell *minishell, int nb_cmd)
 {
 	char	*cmd;
 
-	cmd = minishell->command_line[nb_cmd].cmd;
+	cmd = minishell->command_line[nb_cmd].args[0];
 	if (ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "unset") == 0 || 
 		ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "exit") == 0 ||
 		ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "env") == 0 ||
@@ -43,7 +43,7 @@ int execute_builtins(char *cmd, t_minishell *minishell, int nb_cmd)
 	else if (ft_strcmp(cmd, "env") == 0)
 		return(ft_env(minishell->env), 1);
 	else if (ft_strcmp(cmd, "exit") == 0)
-		return (ft_exit(minishell, nb_cmd), -1);
+		return (ft_exit(minishell, nb_cmd, cmd), 0);
 	else if (ft_strcmp(cmd, "echo") == 0)
 		return(ft_echo(args));
 	else
@@ -62,5 +62,4 @@ void exec_cmd(t_minishell *minishell)
 		exec_single(minishell);
 	else
 		exec_multiple(minishell);
-	printf("return value : %i\n", minishell->rt_val);
 }

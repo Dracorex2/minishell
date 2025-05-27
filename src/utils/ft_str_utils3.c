@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:55:50 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/20 15:30:20 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:52:35 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,4 +137,18 @@ int	ft_cpt_heredoc(char *segment)
 			i++;
 	}
 	return (cpt);
+}
+
+int    ft_in_tab(char **tab, char *str)
+{
+    int    i;
+
+    i = 0;
+    while (tab[i])
+    {
+        if (!ft_strcmp(tab[i], str))
+            return (1);
+        i++;
+    }
+    return (0);
 }

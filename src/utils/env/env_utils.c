@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:55:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/20 18:34:33 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:00:42 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,18 @@ int	get_env_index(char **env, char *name)
 			return (i);
 	}
 	return (-1);
+}
+
+void	upd_shlvl(char **env)
+{
+	int	i;
+	long int shlvl;
+	int is_i;
+	i = get_env_index(env, "SHLVL");
+	is_i = ft_atoi64(ft_getenv(env, "SHLVL"), &shlvl);
+	if (env[i])
+		free(env[i]);
+	if (is_i == 1)
+		env [i] = ft_itoa(1);
+	env[i] = ft_itoa(shlvl + 1);
 }

@@ -6,12 +6,14 @@
 /*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 17:34:43 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/07 16:11:55 by norabino         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:06:03 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+#include "stdio.h"
+#include "stdlib.h"
 
 char	*ft_strndup(char *str, int n)
 {
@@ -66,7 +68,7 @@ void	ft_build_line(char *str, int *s, int *e, char *c)
 void	ft_free_dst(char ***dst, int *i)
 {
 	while ((*i)--)
-		free(*dst[*i]);
+		free((*dst)[*i]);
 	free(*dst);
 }
 
@@ -77,6 +79,20 @@ char	**ft_split(char const *str, char c)
 
 	if (!str)
 		return (NULL);
+	if (!ft_search((char *)str, c))
+	{
+		dst = (char **)malloc(sizeof(char *) * 2);
+		if (!dst)
+			return (NULL);
+		dst[0] = ft_strndup((char *)str, ft_strlen((char *)str));
+		if (!dst[0])
+        {
+            free(dst);
+            return (NULL);
+        }
+		dst[1] = 0;
+		return (dst);
+	}
 	dst = (char **)malloc(sizeof(char *) * (ft_countwords(str, (int)c) + 1));
 	if (!dst)
 		return (NULL);
@@ -97,3 +113,4 @@ char	**ft_split(char const *str, char c)
 	dst[tab[2]] = 0;
 	return (dst);
 }
+

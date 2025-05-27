@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 16:39:20 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/21 17:10:52 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:26:18 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ static int	is_int(char *text)
 {
 	int	i;
 
+	if (!text)
+		return (0);
 	i = 0;
 	if (('-' == text[i] || '+' == text[i]) && '\0' != text[i + 1])
 		i++;

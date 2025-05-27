@@ -1,8 +1,8 @@
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror -g -Iincludes
+CFLAGS = -Wall -Wextra -Werror -g -Iincludes -fsanitize=address
 SRCS = src/main.c\
-	src/parsing/parsing.c src/parsing/redirections.c src/parsing/heredoc.c \
+	src/parsing/parsing.c src/parsing/redirections.c src/parsing/heredoc.c src/parsing/env_variables.c\
 	src/execution/exec.c\
 	src/execution/command.c\
 	src/execution/exec_single.c\
@@ -18,6 +18,7 @@ SRCS = src/main.c\
 	src/utils/env/env_utils.c\
 	src/utils/env/rm_var_env.c\
 	src/utils/env/set_var_env.c\
+	src/utils/itoa.c\
 	src/builtin/echo.c src/builtin/exit.c src/builtin/cd.c src/builtin/unset.c src/builtin/export.c src/builtin/env.c src/builtin/pwd.c
 	
 OBJS = $(SRCS:.c=.o)
@@ -39,7 +40,8 @@ fclean: clean
 
 re: fclean all
 
-dev: fclean
-	git add *; git commit -m "dev"; git push;
+debug: $(NAME)
+	@echo "Running Valgrind on $(NAME)"
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=readline.sup ./$(NAME)
 
 .PHONY: all clean fclean re dev

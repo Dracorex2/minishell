@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 16:43:43 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/20 15:38:06 by lucmansa         ###   ########.fr       */
+/*   Created: 2025/05/27 17:47:34 by lucmansa          #+#    #+#             */
+/*   Updated: 2025/05/27 17:47:39 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char **ft_realloc_tab(char **old, int new_size)
+char **ft_realloc_heredoc(char **old, int new_size)
 {
 	char **new;
 	int i;
@@ -43,15 +43,15 @@ char **ft_realloc_tab(char **old, int new_size)
 	return (new);
 }
 
-void ft_heredoc(char **ends, char ***stockage, int *i)
+void ft_heredoc(char **delimiters, char ***stockage, int *i)
 {
     char *input;
     int current_end;
 	int	end_count;
    
 	current_end = 0;
-	end_count = ft_strstrlen(ends);
-    while (ends[current_end])
+	end_count = ft_strstrlen(delimiters);
+    while (delimiters[current_end])
     {
         *i = 0;
         if (*stockage)
@@ -68,14 +68,14 @@ void ft_heredoc(char **ends, char ***stockage, int *i)
             input = readline("heredoc> ");
             if (!input)
                 return;
-            if (!ft_strcmp(input, ends[current_end]))
+            if (!ft_strcmp(input, delimiters[current_end]))
             {
                 free(input);
                 break;
             }
 			if (current_end == end_count - 1)
 			{
-	            *stockage = ft_realloc_tab(*stockage, *i + 1);
+	            *stockage = ft_realloc_heredoc(*stockage, *i + 1);
 	            if (!*stockage)
 	            {
 	                free(input);
@@ -133,12 +133,12 @@ char	*ft_format_stockage(char **stockage)
 	return (new);
 }
 
-int	ft_parse_heredoc(t_minishell *command, int cmd_index, char *segment, int *begin_rdr, int *end_rdr)
+int	ft_parse_heredoc(t_minishell *minishell, int cmd_index, char *segment, int *begin_rdr, int *end_rdr)
 {
 	char **stockage;
 	int	i;
 	int	begin_hd;
-	char **ends;	
+	char **delimiters;	
 	int	cpt_delimiter;
 	int	j;
 	int	pos;
@@ -160,17 +160,18 @@ int	ft_parse_heredoc(t_minishell *command, int cmd_index, char *segment, int *be
 	}
 	pos = *begin_rdr;
 	substr = ft_substr(segment, *begin_rdr, ft_strlen(segment) - *begin_rdr);
-	ends = ft_split(substr, ' ');
+	delimiters = ft_split(substr, ' ');
 	free(substr);
-	if (!ends)
+	if (!delimiters)
 		return (0);
-	stockage = malloc(sizeof(char *) * 1);
+	minishell->command_line[cmd_index].redirect.hd_delimiters = delimiters;
+	stockage = malloc(sizeof(char *));
 	if (!stockage)
-		return (ft_free_split(ends), 0);
+		return (ft_free_split(delimiters), 0);
 	stockage[0] = NULL;
 	i = 0;
-	ft_heredoc(ends, &stockage, &i);
-	cpt_delimiter = ft_strstrlen(ends);
+	ft_heredoc(delimiters, &stockage, &i);
+	cpt_delimiter = ft_strstrlen(delimiters);
 	if (cpt_delimiter > 0)
 	{
 		j = 0;
@@ -178,7 +179,7 @@ int	ft_parse_heredoc(t_minishell *command, int cmd_index, char *segment, int *be
 		{
 			while (segment[pos] && segment[pos] == ' ')
 				pos++;
-			pos += ft_strlen(ends[j]);
+			pos += ft_strlen(delimiters[j]);
 			j++;
 			while (j < cpt_delimiter && segment[pos] && segment[pos] == ' ')
 				pos++;
@@ -187,7 +188,8 @@ int	ft_parse_heredoc(t_minishell *command, int cmd_index, char *segment, int *be
 	}
 	else
 		*end_rdr = *begin_rdr;
-	ft_free_split(ends);
-	command->command_line[cmd_index].redirect.heredoc = ft_format_stockage(stockage);
-	return (i);
+	ft_env_HEREDOC(minishell, stockage, cmd_index);
+	ft_free_split(delimiters);
+	minishell->command_line[cmd_index].redirect.heredoc = ft_format_stockage(stockage);
+	return (1);
 }

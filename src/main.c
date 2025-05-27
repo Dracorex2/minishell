@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:01:06 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/20 15:41:08 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:56:56 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,18 @@ void	ft_minishell(t_minishell command)
 			free_command_lines(&command);
 		}
 	}
-	clear_history();	
+	rl_clear_history();
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_minishell	minishell;
 
+	printf("Welcome to MINISHELL\n");
 	(void)argc;
 	(void)argv;
 	minishell.env = cpy_env(env);
+	upd_shlvl(minishell.env);
 	ft_minishell(minishell);
 	return (0);
 }

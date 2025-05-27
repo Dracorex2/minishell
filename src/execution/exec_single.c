@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:26:09 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/21 15:51:48 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:55:15 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	waitandclose(int pipes[2], int	pid, int *ret)
 	*ret = WEXITSTATUS(*ret) %256;
 }
 
-void exec_single(t_minishell *minishell)
+void	exec_single(t_minishell *minishell)
 {
 	char *cmdchr;
 	int	pid;
@@ -67,5 +67,6 @@ void exec_single(t_minishell *minishell)
 		else
 			waitandclose(pipes, pid, &minishell->rt_val);
 	}
+	free(cmdchr);
 	default_redirect(NULL, default_, NULL, 1);
 }

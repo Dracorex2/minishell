@@ -1,0 +1,77 @@
+{
+   leak1
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:malloc
+   ...
+   fun:readline
+}
+{
+   leak1
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:realloc
+   ...
+   fun:readline
+}
+{
+   leak1
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:calloc
+   ...
+   fun:readline
+}
+{
+   leak2
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:malloc
+   ...
+   fun:readline
+   fun:msh_get_input
+   fun:main
+}
+{
+   leak2
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:malloc
+   ...
+   fun:add_history
+}
+{
+   leak2
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:calloc
+   ...
+   fun:readline_internal_setup
+}
+
+{
+   leak2
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:malloc
+   ...
+   fun:readline_internal_setup
+}
+
+{
+   leak2
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:calloc
+   ...
+   fun:rl_redsiplay
+}
+
+{
+   leak2
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:malloc
+   ...
+   fun:rl_redsiplay
+}

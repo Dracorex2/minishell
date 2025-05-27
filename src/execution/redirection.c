@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:29:36 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/21 14:48:30 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:13:39 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ void	redirect_heredoc(t_minishell *minishell, int pipes[2], int ixd)
 		close(dup(STDIN_FILENO));
 		dup2(pipes[0], STDIN_FILENO);
 	}
-	close(pipes[0]);
-	close(pipes[1]);
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/21 17:13:27 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:57:14 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ typedef struct s_redirections
 {
 	char	*ri;
 	char	*heredoc;
+	char	**hd_delimiters;
 	char	*ro;
 	char	*aro;
 }	t_rdr;
 
 typedef	struct s_command_line
 {
-	char *cmd;
 	char **args;
 	t_rdr	redirect;
 }	t_command_line;
@@ -97,7 +97,7 @@ void	ft_set_spaces(char *segment, int begin, int length);
 
 //builtins
 int ft_echo(char **argv);
-int	ft_exit(t_minishell *minishell, int idx);
+int	ft_exit(t_minishell *minishell, int idx, char *cmd);
 int	ft_cd(char **argv, char **env);
 int	ft_unset(t_minishell *minishell);
 int	ft_export(t_minishell *minishell, char **args);
@@ -132,6 +132,7 @@ char **cpy_env(char **env);
 int		get_env_index(char **env, char *name);
 void	rm_var_env(char **env, char *name);
 void	set_var_env(char **env, char *name, char *value);
+void	upd_shlvl(char **env);
 
 //command
 void	execute_command(char *cmd, t_minishell *minishell, int idx);
@@ -142,8 +143,13 @@ void	*ft_realloc(void *ptr, int old_size, int n_size);
 
 //atoi
 int		ft_atoi64(char *text, int64_t *res);
+char	*ft_itoa(int n);
 
 //str_cmp
 int	ft_strncmp(char *s1, char *s2, int n);
+
+void	ft_env_ARGS(t_minishell *minishell, char **args);
+void	ft_env_HEREDOC(t_minishell *minishell, char **hd, int cmd_index);
+int    ft_in_tab(char **tab, char *str);
 
 #endif
