@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 19:34:52 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/02 16:57:47 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:30:48 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,10 @@ static void	sort_tab_p(char ***env, int len)
 			printf("declare -x %s=\"%s\"\n", env[i][0], env[i][1]);
 		else
 			printf("declare -x %s\n", env[i][0]);
-		
 	}
 }
 
-static char ***split_cpy_env(char **env)
+static char	***split_cpy_env(char **env)
 {
 	char	***new;
 	int		len;
@@ -75,8 +74,8 @@ static int	ton_pere_le_chien(char *str)
 		if (str[i] == '+' && i == (ft_strlen(str) - 1))
 			return (1);
 		if (!(('A' <= str[i] && str[i] <= 'Z')
-			|| ('a' <= str[i] && str[i] <= 'z')
-			|| ('0' <= str[i] && str[i] <= '9') || str[i] == '_'))
+				|| ('a' <= str[i] && str[i] <= 'z')
+				|| ('0' <= str[i] && str[i] <= '9') || str[i] == '_'))
 			return (0);
 	}
 	return (1);
@@ -85,11 +84,12 @@ static int	ton_pere_le_chien(char *str)
 static int	ta_mere_la_pute(t_minishell *minishell, char *name, char *value)
 {
 	if (!ton_pere_le_chien(name))
-		return (1);	
+		return (1);
 	if (name[ft_strlen(name) - 1] == '+')
 	{
 		name[ft_strlen(name) - 1] = '\0';
-		minishell->env = set_var_env(minishell->env, name, ft_strjoin(ft_getenv(minishell->env, name), value));
+		minishell->env = set_var_env(minishell->env, name,
+				ft_strjoin(ft_getenv(minishell->env, name), value));
 	}
 	else
 		minishell->env = set_var_env(minishell->env, name, value);
@@ -104,10 +104,10 @@ int	ft_export(t_minishell *minishell, char **args)
 
 	if (!args[1])
 	{
-		env_cpy = split_cpy_env(minishell->env);;
+		env_cpy = split_cpy_env(minishell->env);
 		sort_tab_p(env_cpy, tab_len((char **)env_cpy));
 		ft_free_tabtab(env_cpy);
-			return (1);
+		return (1);
 	}
 	i = 0;
 	while (args[++i])
@@ -118,7 +118,8 @@ int	ft_export(t_minishell *minishell, char **args)
 				ta_mere_la_pute(minishell, ft_strdup(args[i]), NULL);
 		}
 		else
-			ta_mere_la_pute(minishell, ft_get_name(args[i]), ft_get_value(args[i]));
+			ta_mere_la_pute(minishell, ft_get_name(args[i]),
+				ft_get_value(args[i]));
 	}
 	return (1);
 }

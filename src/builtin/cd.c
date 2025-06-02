@@ -6,16 +6,16 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 19:09:32 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/02 16:41:46 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:28:17 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int is_dirrectory(char *path)
+static int	is_dirrectory(char *path)
 {
-	struct stat info;
-	
+	struct stat	info;
+
 	if (access(path, F_OK) == 0)
 	{
 		if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
@@ -49,9 +49,9 @@ int	ft_cd(char **argv, t_minishell *minishell)
 	else
 		path = argv[1];
 	if (access(path, F_OK) != 0)
-		return(printf("cd: No such file or directory\n"), 1);
+		return (printf("cd: No such file or directory\n"), 1);
 	if (!is_dirrectory(path))
-		return(printf("cd: Not a directory\n"), 1);
+		return (printf("cd: Not a directory\n"), 1);
 	chdir(path);
 	update_pwd_env(minishell);
 	return (0);
