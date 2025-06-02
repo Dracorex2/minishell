@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:18:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/02 17:57:36 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:10:04 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	exec_multiple(t_minishell *minishell)
 	int	*pid;
 	int	**pipes;
 
-	printf("nb_command : %i\n", minishell->nb_cmd);
 	setup_pipes(minishell, &pipes);
 	pid = malloc(sizeof(int) * minishell->nb_cmd);
 	i = 0;
@@ -28,7 +27,9 @@ void	exec_multiple(t_minishell *minishell)
 		if (pid[i] == 0)
 			execute_child(minishell, pipes, i, pid);
 		else
-			parent_pipes(minishell, pipes, i);
+			if (minishell->command_line[i].redirect.heredoc)
+				write(pipes[i][1], &minishell->command_line[i].redirect.heredoc,
+					ft_strlen(minishell->command_line[i].redirect.heredoc));
 		i++;
 	}
 	closepipes(minishell, pipes);

@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/02 17:17:44 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:10:18 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,19 @@ void	redirect_output(t_minishell *minishell, int idx);
 void	redirect_heredoc(t_minishell *minishell, int pipes[2], int ixd);
 
 //single
-void	redirect_single(t_minishell *minishell);
+void	default_redirect(t_minishell *minishell, int d_i_o[2], int p[2], int i);
 void	exec_single(t_minishell *minishell);
+void	waitandclose(int pipes[2], int pid, int *ret);
 
 //multiple
-void exec_multiple(t_minishell *minishell);
+void	exec_multiple(t_minishell *minishell);
+void	wait_all_pid(int *pid, int nb_cmd, int *ret);
+void	execute_child(t_minishell *minishell, int **pipes, int idx, int *pid);
+void	redirect_multiple(t_minishell *minishell, int **pipes, int idx);
+void	exit_fail_schr(t_minishell *minishell, int **pipes, int *pid);
+void	setup_pipes(t_minishell *minishell, int ***pipes);
+void	cleanup_pipes(int **pipes, int nb_pipes);
+void	closepipes(t_minishell *minishell, int **pipes);
 
 //env
 char 	**cpy_env(char **env);

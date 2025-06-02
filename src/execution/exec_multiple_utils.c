@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:46:45 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/02 18:03:50 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:10:10 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,6 @@ void	execute_child(t_minishell *minishell, int **pipes, int idx, int *pid)
 	if (ret == -1)
 		execute_command(cmdchr, minishell, idx);
 	exit(ret);
-}
-
-void	parent_pipes(t_minishell *minishell, int **pipes, int i)
-{
-	if (minishell->command_line[i].redirect.heredoc)
-		write(pipes[i][1], &minishell->command_line[i].redirect.heredoc,
-			ft_strlen(minishell->command_line[i].redirect.heredoc));
 }
 
 void	wait_all_pid(int *pid, int nb_cmd, int *ret)
