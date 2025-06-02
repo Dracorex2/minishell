@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:01:06 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/02 17:25:18 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:26:28 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	ft_minishell(t_minishell command)
 			free_command_lines(&command);
 		}
 	}
+	free(command.line);
+	ft_free_split(command.env);
 	rl_clear_history();
 }
 

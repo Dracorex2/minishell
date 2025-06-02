@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:57:23 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/02 16:51:06 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:39:28 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void free_command_lines(t_minishell *command)
 			free(command->command_line[i].redirect.aro);
 		i++;
 	}
-	free(command->command_line);
-	free(command->line);
+	if (command->command_line)
+		free(command->command_line);
+	if (command->line)
+		free(command->line);
 }
