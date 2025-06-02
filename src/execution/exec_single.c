@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:26:09 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/26 16:55:15 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:06:13 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ void	exec_single(t_minishell *minishell)
 		else
 			waitandclose(pipes, pid, &minishell->rt_val);
 	}
-	free(cmdchr);
 	default_redirect(NULL, default_, NULL, 1);
+	free(cmdchr);
 }

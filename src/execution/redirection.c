@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:29:36 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/26 15:13:39 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:44:03 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void redirect_output(t_minishell *minishell, int idx)
 {
 	int fd;
 
+	fd = 0;
 	if (minishell->command_line[idx].redirect.aro)
 	{
 		fd = open(minishell->command_line[idx].redirect.aro, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -48,8 +49,7 @@ void redirect_input(t_minishell *minishell, int idx)
 {
 	int fd;
 
-	if (minishell->command_line[idx].redirect.ri)
-		fd = open(minishell->command_line[idx].redirect.ri, O_RDONLY);
+	fd = open(minishell->command_line[idx].redirect.ri, O_RDONLY);
 	if (fd == -1)
 	{
 		printf("%s: No such file or directory\n", minishell->command_line[idx].redirect.ri);

@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:55:50 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/27 17:52:35 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/05/28 19:11:10 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		len2;
 	int		i;
 
+	if (!s1)
+		return (s2);
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
 	res = malloc(sizeof(char) * (len1 + len2 + 1));

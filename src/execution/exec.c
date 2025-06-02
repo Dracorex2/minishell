@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:18:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/26 16:58:58 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:42:33 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_builtin(t_minishell *minishell, int nb_cmd)
 	if (ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "unset") == 0 || 
 		ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "exit") == 0 ||
 		ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "env") == 0 ||
-		ft_strcmp(cmd, "exit") == 0)
+		ft_strcmp(cmd, "export") == 0)
 		return (1);
 	return (0);
 }
@@ -33,7 +33,7 @@ int execute_builtins(char *cmd, t_minishell *minishell, int nb_cmd)
 
 	args = minishell->command_line[nb_cmd].args;
 	if (ft_strcmp(cmd, "cd") == 0)
-		return(ft_cd(args, minishell->env));
+		return(ft_cd(args, minishell));
 	else if (ft_strcmp(cmd, "pwd") == 0)
 		return(ft_pwd());
 	else if (ft_strcmp(cmd, "export") == 0)

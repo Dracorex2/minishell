@@ -6,40 +6,53 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 19:09:32 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/26 17:40:41 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:41:46 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
-static void	update_pwd_env(char **env)
+static int is_dirrectory(char *path)
+{
+	struct stat info;
+	
+	if (access(path, F_OK) == 0)
+	{
+		if (stat(path, &info) == 0 && S_ISDIR(info.st_mode))
+			return (1);
+	}
+	return (0);
+}
+
+static void	update_pwd_env(t_minishell *minishell)
 {
 	char	cwd[200];
 	char	*old_pwd;
 
-	old_pwd = ft_getenv(env, "PWD");
+	old_pwd = ft_getenv(minishell->env, "PWD");
 	if (old_pwd)
-		set_var_env(env, "OLDPWD", old_pwd);
+		minishell->env = set_var_env(minishell->env, "OLDPWD", old_pwd);
 	if (getcwd(cwd, 200))
-		set_var_env(env, "PWD", cwd);
+		minishell->env = set_var_env(minishell->env, "PWD", cwd);
 }
 
-int	ft_cd(char **argv, char **env)
+int	ft_cd(char **argv, t_minishell *minishell)
 {
 	char	*path;
 
-	if (!argv)
+	if (!argv[1])
 	{
-		path = ft_getenv(env, "HOME");
+		path = ft_getenv(minishell->env, "HOME");
 		if (!path)
-		{
-			printf("cd: HOME not set\n");
-			return (0);
-		}
+			return (printf("cd: HOME not set\n"), 0);
 	}
 	else
 		path = argv[1];
+	if (access(path, F_OK) != 0)
+		return(printf("cd: No such file or directory\n"), 1);
+	if (!is_dirrectory(path))
+		return(printf("cd: Not a directory\n"), 1);
 	chdir(path);
-	update_pwd_env(env);
+	update_pwd_env(minishell);
 	return (0);
 }

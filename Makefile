@@ -1,6 +1,6 @@
 NAME = minishell
-
-CFLAGS = -Wall -Wextra -Werror -g -Iincludes -fsanitize=address
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g -Iincludes #-fsanitize=address
 SRCS = src/main.c\
 	src/parsing/parsing.c src/parsing/redirections.c src/parsing/heredoc.c src/parsing/env_variables.c\
 	src/execution/exec.c\
@@ -27,9 +27,9 @@ LIBS = -lreadline
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	cc $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 
-%.o: %.c minishell.h
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
@@ -44,4 +44,7 @@ debug: $(NAME)
 	@echo "Running Valgrind on $(NAME)"
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=readline.sup ./$(NAME)
 
-.PHONY: all clean fclean re dev
+dev: fclean
+	git add *; git commit -m "dev"; git push --force
+
+.PHONY: all clean fclean re dev debug

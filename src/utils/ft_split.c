@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 17:34:43 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/27 16:06:03 by norabino         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:13:37 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	*ft_strndup(char *str, int n)
 	char	*tab;
 	int		i;
 
+	if (n < 0)
+		return (ft_strdup(str));
 	tab = (char *)malloc(n + 1);
 	if (!tab)
 		return (NULL);

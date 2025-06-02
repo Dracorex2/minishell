@@ -1,12 +1,1 @@
-d
-f
-includes
-Makefile
-minishell
-readline.sup
-src
-vgcore.79749
-vgcore.79838
-vgcore.83029
-vgcore.83178
-vgcore.84738
+cacac

@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:57:23 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/27 17:53:23 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:51:06 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,24 @@ void	ft_free_split(char **args)
 	{
 		free (args[i]);
 		i++;
+	}
+	free(args);
+}
+
+void	ft_free_tabtab(char ***args)
+{
+	int	i;
+	int j;
+
+	if (args == NULL)
+		return ;
+	i = -1;
+	while (args[++i])
+	{
+		j = -1;
+		while (args[i][++j])
+			free (args[i][j]);
+		free (args[i]);
 	}
 	free(args);
 }

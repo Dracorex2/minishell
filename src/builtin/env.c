@@ -6,11 +6,12 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:32:33 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/26 17:39:11 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:36:52 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include "minishell.h"
 
 int	ft_env(char **env)
 {
@@ -19,7 +20,12 @@ int	ft_env(char **env)
 	i = -1;
 	if (!env)
 		return (-1);
-	while (env[++i])
-		printf("%s\n", env[i]);
+	while (env[++i] != NULL)
+	{
+		if (!ft_strchr(env[i], '='))
+			;
+		else
+			printf("%s\n", env[i]);
+	}
 	return (0);
 }

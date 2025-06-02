@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:55:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/27 18:00:42 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:45:09 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,27 @@ char	*ft_getenv(char **env, char *var)
 	return (NULL);
 }
 
+char	*ft_get_name(char *env)
+{
+	char	*res;
+
+	if (ft_strchr(env, '='))
+		res = ft_strndup(env, (ft_strchr(env, '=') - env));
+	else
+		res = ft_strdup(env);
+	return (res);
+}
+
+char	*ft_get_value(char *env)
+{
+	char	*res;
+
+	res = NULL;
+	if (ft_strchr(env, '='))
+		res = ft_strdup(ft_strchr(env, '=') + 1);
+	return (res);
+}
+
 int	get_env_index(char **env, char *name)
 {
 	int		i;
@@ -48,16 +69,14 @@ int	get_env_index(char **env, char *name)
 	return (-1);
 }
 
-void	upd_shlvl(char **env)
+void	upd_shlvl(t_minishell *minishell)
 {
-	int	i;
-	long int shlvl;
-	int is_i;
-	i = get_env_index(env, "SHLVL");
-	is_i = ft_atoi64(ft_getenv(env, "SHLVL"), &shlvl);
-	if (env[i])
-		free(env[i]);
-	if (is_i == 1)
-		env [i] = ft_itoa(1);
-	env[i] = ft_itoa(shlvl + 1);
+	long int	shlvl;
+	char		*tmp;
+
+	shlvl = 0;
+	ft_atoi64(ft_getenv(minishell->env, "SHLVL"), &shlvl);
+	tmp = ft_itoa(shlvl + 1);
+	minishell->env = set_var_env(minishell->env, "SHLVL", tmp);
+	free(tmp);
 }

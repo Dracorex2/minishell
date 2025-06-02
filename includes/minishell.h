@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/27 17:57:14 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:17:44 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <stdint.h>
-
+#include <sys/stat.h>
 # include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
@@ -82,7 +82,6 @@ char	*ft_strchr(char *s, int c);
 int	ft_strcmp(char *s1, char *s2);
 	
 void launch_exec(t_minishell *minishell);
-char	*ft_getenv(char **env, char *var);
 
 //heardoc
 void ft_heredoc(char **ends, char ***stockage, int *i);
@@ -97,8 +96,8 @@ void	ft_set_spaces(char *segment, int begin, int length);
 
 //builtins
 int ft_echo(char **argv);
-int	ft_exit(t_minishell *minishell, int idx, char *cmd);
-int	ft_cd(char **argv, char **env);
+int	ft_exit(t_minishell *minishell, int idx);
+int	ft_cd(char **argv, t_minishell *minishell);
 int	ft_unset(t_minishell *minishell);
 int	ft_export(t_minishell *minishell, char **args);
 int	ft_env(char **env);
@@ -128,11 +127,14 @@ void	exec_single(t_minishell *minishell);
 void exec_multiple(t_minishell *minishell);
 
 //env
-char **cpy_env(char **env);
+char 	**cpy_env(char **env);
 int		get_env_index(char **env, char *name);
 void	rm_var_env(char **env, char *name);
-void	set_var_env(char **env, char *name, char *value);
-void	upd_shlvl(char **env);
+char	**set_var_env(char **env, char *name, char *value);
+char	*ft_getenv(char **env, char *var);
+void	upd_shlvl(t_minishell *minishell);
+char	*ft_get_value(char *env);
+char	*ft_get_name(char *env);
 
 //command
 void	execute_command(char *cmd, t_minishell *minishell, int idx);
@@ -140,7 +142,7 @@ char	*search_command(t_minishell *minishell, int idx) ;
 
 //memory
 void	*ft_realloc(void *ptr, int old_size, int n_size);
-
+void	ft_free_tabtab(char ***args);
 //atoi
 int		ft_atoi64(char *text, int64_t *res);
 char	*ft_itoa(int n);
@@ -152,4 +154,7 @@ void	ft_env_ARGS(t_minishell *minishell, char **args);
 void	ft_env_HEREDOC(t_minishell *minishell, char **hd, int cmd_index);
 int    ft_in_tab(char **tab, char *str);
 
+void	exiting(t_minishell *minishell, int value);
+
+char	*ft_strndup(char *str, int n);
 #endif
