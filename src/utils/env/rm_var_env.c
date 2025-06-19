@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rm_var_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:52:51 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/28 17:08:37 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:17:46 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	rm_var_env(char **env, char *name)
 {
 	int	idx;
-	int		len;
+	int	len;
 
 	idx = get_env_index(env, name);
 	if (idx < 0)
@@ -29,4 +29,3 @@ void	rm_var_env(char **env, char *name)
 	}
 	env[idx] = NULL;
 }
-

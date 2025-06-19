@@ -3,86 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/07 18:25:48 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/16 17:57:47 by norabino         ###   ########.fr       */
+/*   Created: 2025/06/05 18:43:17 by lucmansa          #+#    #+#             */
+/*   Updated: 2025/06/19 16:37:47 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_get_rdrsize(char *segment, int redirection)
+static int	ft_which_redir(char *redir, int *i)
 {
-	if ((segment[redirection] == '<' && segment[redirection + 1] != '<')
-		|| (segment[redirection] == '>' && segment[redirection + 1] != '>'))
-		return (1);
-	else if ((segment[redirection] == '<' && segment[redirection + 1] == '<')
-		|| (segment[redirection] == '>' && segment[redirection + 1] == '>'))
-		return (2);
-	return (0);
+	if (redir[*i] == '<' && redir[*i + 1] != '<')
+		return ((*i)++, 1);
+	if (redir[*i] == '>' && redir[*i + 1] != '>')
+		return ((*i)++, 2);
+	if (redir[*i] == '>' && redir[*i + 1] == '>')
+		return ((*i) += 2, 3);
+	if (redir[*i] == '<' && redir[*i + 1] == '<')
+		return ((*i) += 2, 4);
+	return (-1);
 }
 
-int	ft_get_indexes(char *segment, int *begin_rdr, int *end_rdr, int redirection)
+static void	set_redir(t_minishell *minishell, char *redir,
+	int cmd_index, int which_redir)
 {
-	if (!ft_get_rdrsize(segment, redirection))
-		return (0);
-	if (*begin_rdr == redirection)
-        *begin_rdr += ft_get_rdrsize(segment, redirection);
-    else
+	if (which_redir == 1)
 	{
-        *begin_rdr += 1;
+		free(minishell->command_line[cmd_index].redirect.ri);
+		minishell->command_line[cmd_index].redirect.ri = redir;
+		free(minishell->command_line[cmd_index].redirect.heredoc);
+		minishell->command_line[cmd_index].redirect.heredoc = NULL;
 	}
-	while (segment[*begin_rdr] && segment[*begin_rdr] == ' ')
-			(*begin_rdr)++;
-	if (!segment[*begin_rdr])
-		return (0);
-	*end_rdr = *begin_rdr;
-	while (segment[*end_rdr] && segment[*end_rdr] != ' ')
-		(*end_rdr)++;
-	return (1);
-}
-
-void	ft_redirections(t_minishell *command, char *segment, int redirection, int begin_rdr, int cmd_index)
-{
-	int	end_rdr;
-
-	end_rdr = 0;
-	if (!ft_get_indexes(segment, &begin_rdr, &end_rdr, redirection))
-			return ;
-	// ri <
-	if (segment[redirection] == '<' && segment[redirection + 1] != '<')
-		command->command_line[cmd_index].redirect.ri = ft_substr(segment, begin_rdr, end_rdr - begin_rdr);
-	// ro >
-	if (segment[redirection] == '>' && segment[redirection + 1] != '>')
-		command->command_line[cmd_index].redirect.ro = ft_substr(segment, begin_rdr, end_rdr - begin_rdr);
-	// aro >>
-	if (segment[redirection] == '>' && segment[redirection + 1] == '>')
-		command->command_line[cmd_index].redirect.aro = ft_substr(segment, begin_rdr, end_rdr - begin_rdr);
-	// heredoc <<
-	if (segment[redirection] == '<' && segment[redirection + 1] == '<')
-		ft_parse_heredoc(command, cmd_index, segment, &begin_rdr, &end_rdr);
-	ft_set_spaces(segment, redirection, end_rdr - redirection + 1);
-
-}
-
-void	ft_handle_redirections(t_minishell *command, char *segment, int cmd_index)
-{
-	int	begin_rdr;
-	int redirection;
-
-	while (1)
+	if (which_redir == 2)
 	{
-		if (!ft_search(segment, '<') && !ft_search(segment, '>'))
-			return;
-		redirection = 0;
-		while (segment[redirection] != '<' && segment[redirection] != '>')
-			redirection++;
-		begin_rdr = redirection;
-		
-		if ((segment[redirection] == '<' && segment[redirection + 1] == '<') || 
-            (segment[redirection] == '>' && segment[redirection + 1] == '>'))
-            begin_rdr++;
-		ft_redirections(command, segment, redirection, begin_rdr, cmd_index);
+		free(minishell->command_line[cmd_index].redirect.ro);
+		minishell->command_line[cmd_index].redirect.ro = redir;
+		free(minishell->command_line[cmd_index].redirect.aro);
+		minishell->command_line[cmd_index].redirect.aro = NULL;
 	}
+	if (which_redir == 3)
+	{
+		free(minishell->command_line[cmd_index].redirect.aro);
+		minishell->command_line[cmd_index].redirect.aro = redir;
+		free(minishell->command_line[cmd_index].redirect.ro);
+		minishell->command_line[cmd_index].redirect.ro = NULL;
+	}
+	if (which_redir == 4)
+		readline_heredoc(minishell, redir, cmd_index);
+}
+
+char	*handle_redir(t_minishell *minishell, int cmd_idx, char *segment)
+{
+	char	*redir;
+	int		which_redir;
+	int		start[2];
+	int		i;
+
+	i = 0;
+	while (segment[i])
+	{
+		if (is_redir(&segment[i]))
+		{
+			start[0] = i;
+			which_redir = ft_which_redir(segment, &i);
+			skip_spaces(segment, &i);
+			start[1] = i;
+			redir = get_str(segment, &i);
+			set_redir(minishell, redir, cmd_idx, which_redir);
+			ft_set_spaces(segment, start[0], is_redir(&segment[start[0]]));
+			ft_set_spaces(segment, start[1], ft_strlen(redir));
+			if (which_redir == 4)
+				free(redir);
+		}
+		else
+			i++;
+	}
+	return (segment);
 }

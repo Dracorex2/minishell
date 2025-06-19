@@ -3,52 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   itoa.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:29:36 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/27 17:54:29 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:16:08 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_itoa2(char *res, int i, int n)
+size_t	ft_countsize(long nb)
 {
-	res[i] = 0;
-	if (n < 0)
+	size_t	s;
+
+	s = 0;
+	if (nb <= 0)
 	{
-		res[0] = '-';
-		n *= -1;
+		nb = -nb;
+		s++;
 	}
-	while (n)
+	while (nb)
 	{
-		res[--i] = (n % 10) + 48;
-		n /= 10;
+		nb = nb / 10;
+		s++;
 	}
+	return (s);
 }
 
 char	*ft_itoa(int n)
 {
-	char	*res;
-	int	i;
-	int		nb;
+	char	*str;
+	size_t	size;
+	long	nb;
 
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	if (n == 0)
+	nb = (long)n;
+	if (nb == 0)
 		return (ft_strdup("0"));
-	nb = n;
-	i = 0;
-	if (nb <= 0)
-		i++;
+	size = ft_countsize(nb);
+	str = (char *)malloc(sizeof(char) * (size + 1));
+	if (!str)
+		return (NULL);
+	if (nb < 0)
+	{
+		str[0] = '-';
+		nb = -nb;
+	}
+	str[size] = '\0';
 	while (nb)
 	{
-		nb /= 10;
-		i++;
+		str[--size] = nb % 10 + '0';
+		nb = nb / 10;
 	}
-	res = malloc(sizeof(char) * i + 1);
-	if (!res)
-		return (NULL);
-	ft_itoa2(res, i, n);
-	return (res);
+	return (str);
 }

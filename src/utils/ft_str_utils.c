@@ -3,36 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:53:10 by norabino          #+#    #+#             */
-/*   Updated: 2025/05/14 17:28:01 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:08:56 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-
 int	verif_quotes(char *str)
 {
-	int	simple_q;
-	int	double_q;
-	int	i;
+	char	quote;
+	int		i;
 
-	simple_q = 0;
-	double_q = 0;
-	i = 0;
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
-		if (str[i] == 34)
-			double_q++;
-		else if (str[i] == 39)
-			simple_q++;
-		i++;	
+		if (str[i] == '\"' || str[i] == '\'')
+		{
+			quote = str[i];
+			i++;
+			while (str[i] && str[i] != quote)
+				i++;
+			if (!str[i])
+				return (printf("Error : Open quotes.\n"), 0);
+		}
 	}
-	if (double_q % 2 != 0 || simple_q % 2 != 0)
-		return (0);
 	return (1);
 }
 
@@ -60,15 +57,6 @@ char	*ft_substr(char *s, int start, int len)
 	return (str);
 }
 
-char	*ft_strjoin_char(char *s1, char c)
-{
-	char tmp[2];
-
-	tmp[0] = c;
-	tmp[1] = '\0';
-	return ft_strjoin(s1, tmp);
-}
-
 int	ft_count_seps(char *str)
 {
 	int	i;
@@ -83,4 +71,22 @@ int	ft_count_seps(char *str)
 		i++;
 	}
 	return (nb);
+}
+
+int	is_redir(char *str)
+{
+	if (str[0] == '<' || str[0] == '>')
+	{
+		if (str[1] == '<' || str[1] == '>')
+			return (2);
+		return (1);
+	}
+	return (0);
+}
+
+int	is_quotes(char *str)
+{
+	if (str[0] == '\'' || str[0] == '\"')
+		return (1);
+	return (0);
 }

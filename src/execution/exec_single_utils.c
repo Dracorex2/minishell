@@ -6,13 +6,27 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:26:09 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/02 17:53:03 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:02:11 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	default_redirect(t_minishell *minishell, int d_i_o[2], int p[2], int i)
+void single_fork(t_minishell *minishell, char *cmdchr, int *pipes)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		redirect_heredoc(minishell, pipes, 0);
+		execute_command(cmdchr, minishell, 0);
+	}
+	else
+		waitandclose(pipes, pid, &minishell->rt_val);
+}
+
+int	default_redirect(t_minishell *minishell, int d_i_o[2], int p[2], int i)
 {
 	if (i == 0)
 	{
@@ -20,9 +34,11 @@ void	default_redirect(t_minishell *minishell, int d_i_o[2], int p[2], int i)
 		d_i_o[1] = dup(STDOUT_FILENO);
 		if (minishell->command_line[0].redirect.aro
 			|| minishell->command_line[0].redirect.ro)
-			redirect_output(minishell, 0);
+			if (redirect_output(minishell, 0) < 0)
+				return (-1);
 		if (minishell->command_line[0].redirect.ri)
-			redirect_input(minishell, 0);
+			if (redirect_input(minishell, 0) < 0)
+				return (-1);
 		if (minishell->command_line[0].redirect.heredoc)
 			write(p[1], minishell->command_line[0].redirect.heredoc,
 				ft_strlen(minishell->command_line[0].redirect.heredoc));
@@ -32,6 +48,7 @@ void	default_redirect(t_minishell *minishell, int d_i_o[2], int p[2], int i)
 		dup2(d_i_o[0], STDIN_FILENO);
 		dup2(d_i_o[1], STDOUT_FILENO);
 	}
+	return (1);
 }
 
 void	waitandclose(int pipes[2], int pid, int *ret)

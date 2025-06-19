@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cpy_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:51:28 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/05/28 17:08:16 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:17:54 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **cpy_env(char **env)
+char	**cpy_env(char **env)
 {
 	char	**new;
 	int		len;

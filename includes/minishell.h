@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/02 18:10:18 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/19 17:56:37 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,16 @@
 # include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <sys/ioctl.h>
+# include <signal.h>
 
 # include <readline/readline.h>
 # include <readline/history.h>
-
-// ri <
-// heredoc <<
-// ro >
-// aro >>
 
 typedef struct s_redirections
 {
 	char	*ri;
 	char	*heredoc;
-	char	**hd_delimiters;
 	char	*ro;
 	char	*aro;
 }	t_rdr;
@@ -57,12 +53,12 @@ typedef struct s_minishell
 
 /* FUNCTIONS */
 int	ft_search(char *str, char c);
-int ft_parse_commandline(t_minishell *command);
-int ft_parse_commandsegment(t_minishell *command, int cmd_index, char *segment);
-int	ft_print_tokens(t_minishell *command);
-void free_command_lines(t_minishell *command);
+int ft_parse_line(t_minishell *minishell);
+int ft_parse_segment(t_minishell *minishell, int cmd_index, char *segment);
+int	ft_print_tokens(t_minishell *minishell);
+void free_command_lines(t_minishell *minishell);
 void	ft_free_split(char **args);
-int	ft_init(t_minishell *command, int nb_cmds);
+int	ft_init(t_minishell *minishell, int nb_cmds);
 int	ft_nextpipe(char *line, int last_pipe);
 int	ft_nbpipes(char *line);
 int	ft_ind_firstspace(char *str);
@@ -74,19 +70,38 @@ char	*ft_strjoin_char(char *s1, char c);
 char	*ft_substr(char *s, int start, int len);
 int	verif_quotes(char *str);
 
-char	**ft_split(char const *str, char c);
+void	skip_spaces(char *str, int *i);
 
-void	ft_handle_redirections(t_minishell *command, char *segment, int cmd_index);
+char	**ft_split_line(char *str, char c);
+
+char	*ft_join_free(char *s1, char *s2, int i);
+
+char *	handle_redir(t_minishell *minishell, int cmd_idx, char *segment);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(char *s, int c);
 int	ft_strcmp(char *s1, char *s2);
+
+char	*handle_env_vars(t_minishell *minishell, char *line);
+char	*replace_all_var(t_minishell *minishell, char *line);
+
+void	ft_print_string(char *str);
+
+int	is_line_valid(char *str, int nb_cmd);
 	
 void launch_exec(t_minishell *minishell);
 
-//heardoc
-void ft_heredoc(char **ends, char ***stockage, int *i);
-int	ft_parse_heredoc(t_minishell *command, int cmd_index, char *segment, int *begin_rdr, int *end_rdr);
+int	readline_heredoc(t_minishell *minishell, char *delimiter, int cmd_idx);
 
+//str utils
+int	is_redir(char *str);
+int	is_quotes(char *str);
+
+//heredoc
+void ft_heredoc(char **ends, char ***stockage, int *i);
+int	ft_parse_heredoc(t_minishell *minishell, int cmd_index, char *segment, int *begin_rdr, int *end_rdr);
+
+//quotes
+char	**remove_quotes(char **args);
 
 //parsing
 int	ft_cpt_heredoc(char *segment);
@@ -112,24 +127,24 @@ int		is_builtin(t_minishell *minishell, int nb_cmd);
 //////////////
 void 	exec_cmd(t_minishell *minishell);
 
-void	faild_schr(t_minishell *minishell, int i, char *schr);
+void	faild_schr(t_minishell *minishell, int i, char *schr, int idx);
 int		execute_builtins(char *cmd, t_minishell *minishell, int nb_cmd);
 //redirect
-void	redirect_input(t_minishell *minishell, int idx);
-void	redirect_output(t_minishell *minishell, int idx);
+int	redirect_input(t_minishell *minishell, int idx);
+int	redirect_output(t_minishell *minishell, int idx);
 void	redirect_heredoc(t_minishell *minishell, int pipes[2], int ixd);
 
 //single
-void	default_redirect(t_minishell *minishell, int d_i_o[2], int p[2], int i);
-void	exec_single(t_minishell *minishell);
-void	waitandclose(int pipes[2], int pid, int *ret);
+int	default_redirect(t_minishell *minishell, int d_i_o[2], int p[2], int i);
+void	waitandclose(int pipes[2], int pid, int *ret);\
+void	single_fork(t_minishell *minishell, char *cmdchr, int *pipes);
+
+//exec
+int		is_executing(int val);
 
 //multiple
-void	exec_multiple(t_minishell *minishell);
 void	wait_all_pid(int *pid, int nb_cmd, int *ret);
 void	execute_child(t_minishell *minishell, int **pipes, int idx, int *pid);
-void	redirect_multiple(t_minishell *minishell, int **pipes, int idx);
-void	exit_fail_schr(t_minishell *minishell, int **pipes, int *pid);
 void	setup_pipes(t_minishell *minishell, int ***pipes);
 void	cleanup_pipes(int **pipes, int nb_pipes);
 void	closepipes(t_minishell *minishell, int **pipes);
@@ -165,4 +180,12 @@ int    ft_in_tab(char **tab, char *str);
 void	exiting(t_minishell *minishell, int value);
 
 char	*ft_strndup(char *str, int n);
+
+char	*ft_replace_var(t_minishell *minishell, char *str, int start);
+
+char 	*get_str(char *seg, int *i);
+
+char	*get_quotes_index(char *str, int *begin_q, int *end_q);
+void	convert_redir(t_minishell *minishell, int idx);
+
 #endif

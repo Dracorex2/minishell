@@ -6,15 +6,16 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 15:40:28 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/02 18:02:38 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/19 17:50:30 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	faild_schr(t_minishell *minishell, int i, char *schr)
+void	faild_schr(t_minishell *minishell, int i, char *schr, int idx)
 {
-	printf("Command not found: %s\n", minishell->command_line[i].args[0]);
+	if (minishell->command_line[idx].args[0])
+		printf("Command not found: %s\n", minishell->command_line[i].args[0]);
 	free(schr);
 }
 
@@ -25,7 +26,7 @@ char	*find_in_path(t_minishell *minishell, int idx)
 	char	*path_tmp;
 	char	*cmd;
 
-	path = ft_split(ft_getenv(minishell->env, "PATH"), ':');
+	path = ft_split_line(ft_getenv(minishell->env, "PATH"), ':');
 	i = -1;
 	while (path && path[++i])
 	{
@@ -42,6 +43,8 @@ char	*find_in_path(t_minishell *minishell, int idx)
 
 char	*search_command(t_minishell *minishell, int idx)
 {
+	if (!minishell->command_line[idx].args[0])
+		return (NULL);
 	if (ft_strchr(minishell->command_line[idx].args[0], '/'))
 	{
 		if (access(minishell->command_line[idx].args[0], X_OK) == 0)
@@ -50,7 +53,7 @@ char	*search_command(t_minishell *minishell, int idx)
 	}
 	if (is_builtin(minishell, idx))
 		return (minishell->command_line[idx].args[0]);
-	if (minishell->env)
+	if (minishell->env && ft_getenv(minishell->env, "PATH"))
 		return (find_in_path(minishell, idx));
 	return (NULL);
 }

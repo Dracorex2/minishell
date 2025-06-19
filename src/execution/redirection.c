@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:29:36 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/02 17:55:00 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:25:16 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@ void	redirect_heredoc(t_minishell *minishell, int pipes[2], int ixd)
 {
 	if (minishell->command_line[ixd].redirect.heredoc)
 	{
-		close(dup(STDIN_FILENO));
 		dup2(pipes[0], STDIN_FILENO);
+		close(pipes[0]);
+		close(pipes[1]);
 	}
 	return ;
 }
 
-void	redirect_output(t_minishell *minishell, int idx)
+int	redirect_output(t_minishell *minishell, int idx)
 {
 	int	fd;
 
@@ -32,34 +33,33 @@ void	redirect_output(t_minishell *minishell, int idx)
 		fd = open(minishell->command_line[idx].redirect.aro,
 				O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-			printf("%s: No such file or directory\n",
-				minishell->command_line[idx].redirect.aro);
+			perror(minishell->command_line[idx].redirect.aro);
 	}
 	if (minishell->command_line[idx].redirect.ro)
 	{
 		fd = open(minishell->command_line[idx].redirect.ro,
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-			printf("%s: No such file or directory\n",
-				minishell->command_line[idx].redirect.ro);
+			perror(minishell->command_line[idx].redirect.ro);
 	}
 	if (fd == -1)
-		exit(-2);
+		return (-1);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (1);
 }
 
-void	redirect_input(t_minishell *minishell, int idx)
+int	redirect_input(t_minishell *minishell, int idx)
 {
 	int	fd;
 
 	fd = open(minishell->command_line[idx].redirect.ri, O_RDONLY);
 	if (fd == -1)
 	{
-		printf("%s: No such file or directory\n",
-			minishell->command_line[idx].redirect.ri);
-		exit(-2);
+		perror(minishell->command_line[idx].redirect.ri);
+		return (-1);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_multiple_pipes.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:44:24 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/02 17:56:26 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:13:28 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	setup_pipes(t_minishell *minishell, int ***pipes)
 		if (pipe((*pipes)[i]) == -1)
 		{
 			perror("pipe");
-			exit(EXIT_FAILURE);
+			exit(1);
 		}
 		i++;
 	}
