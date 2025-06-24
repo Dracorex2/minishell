@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/23 19:12:06 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:27:18 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int		readline_heredoc(t_minishell *minishell, char *delimiter, int cmd_idx);
 //env_vars
 char	*handle_env_vars(t_minishell *minishell, char *line);
 char	*replace_all_var(t_minishell *minishell, char *line);
-char	*ft_replace_var(t_minishell *minishell, char *str, int *start);
 
 //quotes
 char	**remove_quotes(char **args);
@@ -162,6 +161,7 @@ void	ft_free_split(char **args);
 char	*ft_join_free(char *s1, char *s2, int flg);
 char	*ft_strdup(char *str);
 void	ft_free_dst(char ***dst, int *i);
+void	ft_bzero(void *s, size_t n);
 
 //exit
 void	exiting(t_minishell *minishell, int value);

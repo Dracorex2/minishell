@@ -29,8 +29,6 @@
    fun:malloc
    ...
    fun:readline
-   fun:msh_get_input
-   fun:main
 }
 {
    leak2

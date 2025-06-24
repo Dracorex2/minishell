@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:50:42 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/19 15:10:44 by norabino         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:33:11 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,16 @@ void	*ft_realloc(void *ptr, int old_size, int n_size)
 	while (++i < min_size)
 		((char *)new_ptr)[i] = ((char *)ptr)[i];
 	return (free(ptr), new_ptr);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	char	*data;
+
+	data = (char *)s;
+	while (n)
+	{
+		data[n - 1] = 0;
+		n--;
+	}
 }
