@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:47:34 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/19 17:18:35 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:41:41 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *convert_heredoc(t_minishell *mini, char *str)
+char	*convert_heredoc(t_minishell *mini, char *str)
 {
 	int	begin_q;
 	int	end_q;
@@ -42,8 +42,8 @@ int	readline_heredoc(t_minishell *minishell, char *delimiter, int cmd_idx)
 			return (free(input), 0);
 		minishell->command_line[cmd_idx].redirect.heredoc
 			= convert_heredoc(minishell, ft_join_free(ft_join_free(
-					minishell->command_line[cmd_idx].redirect.heredoc,
-					input, 2), "\n", 0));
+						minishell->command_line[cmd_idx].redirect.heredoc,
+						input, 2), "\n", 0));
 	}
 	return (1);
 }

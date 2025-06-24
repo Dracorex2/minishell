@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_utils4.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:01:43 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/19 15:16:41 by norabino         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:37:43 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ void	ft_print_string(char *str)
 
 	i = 0;
 	printf("\n\n");
+	if (!str)
+	{
+		printf("NULL\n");
+		return ;
+	}
 	while (str[i])
 	{
 		printf("str[%d] = %c\n", i, str[i]);

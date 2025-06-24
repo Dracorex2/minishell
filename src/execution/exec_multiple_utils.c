@@ -64,7 +64,6 @@ void	wait_all_pid(int *pid, int nb_cmd, int *ret)
 	{
 		waitpid(pid[i], ret, 0);
 		*ret = WEXITSTATUS(*ret) % 256;
-		printf("tq gradn mere <%d\n", *ret);
 		i++;
 	}
 	free(pid);

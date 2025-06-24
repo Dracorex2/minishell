@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:01:06 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/19 18:07:05 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:42:08 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,23 @@ void	sig_handler(int signum)
 	}
 }
 
+static void	handle_sigquit(void)
+{
+	struct termios	terminal;
+
+	if (tcgetattr(STDIN_FILENO, &terminal) == -1)
+		return ;
+	terminal.c_cc[VQUIT] = 0;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal) == -1)
+		return ;
+	signal(SIGQUIT, &sig_handler);
+}
+
 void	ft_minishell(t_minishell minishell)
 {
 	while (1)
 	{
 		minishell.line = readline("$> ");
-		add_history(minishell.line);
 		if (!minishell.line)
 			break ;
 		if (*minishell.line)
@@ -42,6 +53,7 @@ void	ft_minishell(t_minishell minishell)
 				|| !ft_parse_line(&minishell))
 				continue ;
 			exec_cmd(&minishell);
+			add_history(minishell.line);
 			free_command_lines(&minishell);
 		}
 	}
@@ -57,9 +69,11 @@ int	main(int argc, char **argv, char **env)
 	printf("Welcome to MINISHELL\n");
 	(void)argc;
 	(void)argv;
-	if (signal(SIGINT, &sig_handler) == SIG_ERR)
+	handle_sigquit();
+	if (signal(SIGINT, &sig_handler) == SIG_ERR
+		|| signal(SIGQUIT, NULL) == SIG_ERR)
 		exit(1);
-	minishell.rt_val= 0;
+	minishell.rt_val = 0;
 	minishell.env = cpy_env(env);
 	upd_shlvl(&minishell);
 	ft_minishell(minishell);

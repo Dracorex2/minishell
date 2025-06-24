@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:41:56 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/19 18:04:52 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/23 19:04:26 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	execute_builtins(char *cmd, t_minishell *minishell, int nb_cmd)
 	else if (ft_strcmp(cmd, "env") == 0)
 		return (ft_env(minishell->env), 1);
 	else if (ft_strcmp(cmd, "exit") == 0)
-		return (ft_exit(minishell, nb_cmd), 0);
+		return (ft_exit(minishell, nb_cmd));
 	else if (ft_strcmp(cmd, "echo") == 0)
 		return (ft_echo(args));
 	else

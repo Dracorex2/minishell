@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 19:09:32 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/13 16:16:48 by norabino         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:38:23 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,20 @@ int	ft_cd(char **argv, t_minishell *minishell)
 {
 	char	*path;
 
+	if (argv[2])
+		return (write(2, "minishell: cd: too many arguments\n", 34), 1);
 	if (!argv[1])
 	{
 		path = ft_getenv(minishell->env, "HOME");
 		if (!path)
-			return (write(2, "cd: HOME not set\n", 17), 0);
+			return (write(2, "minishell: cd: HOME not set\n", 28), 0);
 	}
 	else
 		path = argv[1];
 	if (access(path, F_OK) != 0)
-		return (write(2, "cd: No such file or directory\n", 30), 1);
+		return (write(2, "minishell: cd: No such file or directory\n", 41), 1);
 	if (!is_dirrectory(path))
-		return (write(2, "cd: Not a directory\n", 20), 1);
+		return (write(2, "minishell: cd: Not a directory\n", 31), 1);
 	chdir(path);
 	update_pwd_env(minishell);
 	return (0);

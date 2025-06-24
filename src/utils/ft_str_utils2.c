@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:54:39 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/19 15:15:07 by norabino         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:19:15 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,37 @@ int	ft_ind_firstspace(char *str)
 
 int	ft_nbpipes(char *line)
 {
-	int	i;
-	int	cpt;
+	int		i;
+	int		cpt;
+	char	quote;
 
 	i = 0;
 	cpt = 0;
+	quote = 0;
 	while (line[i])
 	{
-		if (line[i] == '|')
+		if (is_quotes(&line[i]) && !quote)
+			quote = line[i];
+		else if (is_quotes(&line[i]) && quote)
+			quote = 0;
+		if (line[i] == '|' && !quote)
 			cpt++;
 		i++;
 	}
 	return (cpt);
+}
+
+void	ft_free_dst(char ***dst, int *i)
+{
+	while ((*i)--)
+		free(*dst[*i]);
+	free(*dst);
+}
+
+int	is_space(char c)
+{
+	if (c == ' ' || c == '\t' || c == '\f'
+		|| c == '\n' || c == '\r' || c == '\v')
+		return (1);
+	return (0);
 }

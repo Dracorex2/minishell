@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:18:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/19 17:58:06 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:45:51 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,14 @@ static int	exec_single(t_minishell *minishell)
 	cmdchr = search_command(minishell, 0);
 	if (!cmdchr)
 		return (default_redirect(NULL, default_, NULL, 1),
-			faild_schr(minishell, 0, cmdchr, 0), 0);
+			faild_schr(minishell, 0, cmdchr, 0), minishell->rt_val = 127, 0);
 	ret = execute_builtins(cmdchr, minishell, 0);
+	minishell->rt_val = ret;
 	if (ret == -1)
+	{
 		single_fork(minishell, cmdchr, pipes);
+		free(cmdchr);
+	}
 	return (default_redirect(NULL, default_, NULL, 1), 0);
 }
 

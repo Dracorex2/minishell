@@ -68,7 +68,7 @@ char	*get_str(char *seg, int *i)
 			quote = seg[size + (*i)];
 		else if (seg[size + (*i)] == quote)
 			quote = 0;
-		else if (seg[size + (*i)] == ' ' && !quote)
+		else if (is_space(seg[size + (*i)]) && !quote)
 			break ;
 		size++;
 	}
@@ -113,6 +113,7 @@ int	ft_parse_segment(t_minishell *minishell, int cmd_idx, char *segment)
 	minishell->command_line[cmd_idx].args[j] = NULL;
 	minishell->command_line[cmd_idx].args
 		= remove_quotes(minishell->command_line[cmd_idx].args);
+	free(segment);
 	return (1);
 }
 

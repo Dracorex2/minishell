@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:54:01 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/19 15:23:50 by norabino         ###   ########.fr       */
+/*   Updated: 2025/06/23 19:09:44 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	check_pipes(char *str, int i)
 	int	j;
 
 	j = i - 1;
-	while (j >= 0 && str[j] == ' ')
+	while (j >= 0 && is_space(str[j]))
 		j--;
 	if (j == -1)
 		return (print_error('|'), 0);
@@ -54,17 +54,23 @@ int	check_pipes(char *str, int i)
 
 int	is_line_valid(char *str, int nb_cmd)
 {
-	int	i;
+	int		i;
+	char	quote;	
 
 	i = 0;
+	quote = 0;
 	skip_spaces(str, &i);
 	if (nb_cmd >= 2 && str[i] == '|')
 		return (print_error(str[i]), 0);
 	while (str[i])
 	{
-		if (is_redir(&str[i]) && !check_redir(str, i))
+		if (is_quotes(&str[i]) && !quote)
+			quote = str[i];
+		else if (is_quotes(&str[i]) && quote)
+			quote = 0;
+		if (is_redir(&str[i]) && !quote && !check_redir(str, i))
 			return (0);
-		if (str[i] == '|' && !check_pipes(str, i))
+		if (str[i] == '|' && !quote && !check_pipes(str, i))
 			return (0);
 		i++;
 	}

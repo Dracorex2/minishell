@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:55:50 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/19 15:30:43 by norabino         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:39:14 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,19 @@
 
 int	ft_nextpipe(char *line, int last_pipe)
 {
-	while (line[last_pipe] && line[last_pipe] != '|')
+	char	quote;
+
+	quote = 0;
+	while (line[last_pipe])
+	{
+		if (is_quotes(&line[last_pipe]) && !quote)
+			quote = line[last_pipe];
+		else if (is_quotes(&line[last_pipe]) && quote)
+			quote = 0;
+		if (line[last_pipe] == '|' && !quote)
+			return (last_pipe);
 		last_pipe++;
+	}
 	return (last_pipe);
 }
 
@@ -75,6 +86,6 @@ char	*ft_strchr(char *s, int c)
 
 void	skip_spaces(char *str, int *i)
 {
-	while (str[*i] == ' ')
+	while (is_space(str[*i]))
 		(*i)++;
 }

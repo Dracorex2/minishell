@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:26:09 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/19 18:02:11 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:30:27 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void single_fork(t_minishell *minishell, char *cmdchr, int *pipes)
+void	single_fork(t_minishell *minishell, char *cmdchr, int *pipes)
 {
 	int	pid;
 

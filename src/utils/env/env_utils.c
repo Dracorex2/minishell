@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:55:08 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/19 18:28:04 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:37:11 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	*ft_get_name(char *env)
 		res = ft_strndup(env, (ft_strchr(env, '=') - env + 1));
 	else
 		res = ft_strdup(env);
-	ft_print_string(res);
 	return (res);
 }
 
