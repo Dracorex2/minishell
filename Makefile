@@ -15,7 +15,7 @@ SRCS = src/main.c\
 	src/utils/ft_split.c\
 	src/utils/len_utils.c\
 	src/utils/memory.c\
-	src/utils/ft_str_utils.c src/utils/ft_str_utils2.c src/utils/ft_str_utils3.c src/utils/ft_str_utils4.c\
+	src/utils/ft_str_utils.c src/utils/ft_str_utils2.c src/utils/ft_str_utils3.c src/utils/ft_str_utils4.c src/utils/ft_str_utils5.c\
 	src/utils/env/cpy_env.c\
 	src/utils/env/env_utils.c\
 	src/utils/env/rm_var_env.c\

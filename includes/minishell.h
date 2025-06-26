@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/26 16:53:38 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:03:36 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ char	*ft_strndup(char *str, int n);
 int		is_line_valid(char *str, int nb_cmd);
 void	ft_print_string(char *str);
 int		is_space(char c);
+int		have_spaces(char *str);
 
 //redirections
 char	*handle_redir(t_minishell *minishell, int cmd_idx, char *segment);
@@ -83,6 +84,7 @@ int		readline_heredoc(t_minishell *minishell, char *delimiter, int cmd_idx);
 //env_vars
 char	*handle_env_vars(t_minishell *minishell, char *line);
 char	*replace_all_var(t_minishell *minishell, char *line);
+char	*ft_replace_var(t_minishell *minishell, char *str, int *start, int mod);
 
 //quotes
 char	**remove_quotes(char **args);

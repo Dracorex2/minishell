@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:47:02 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/26 17:26:44 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:43:12 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ static char	*get_var(t_minishell *minishell, char *str, int start, int *j)
 	char	*tmp;
 	char	*var;
 
-	if (str[start] && is_quotes(&str[start]))
-		var = NULL;
-	else if (!str[start] || !ft_is_var(str[start]))
+	if (!str[start] || !ft_is_var(str[start]))
 		var = ft_strdup("$");
 	else if (str[start])
 	{
@@ -85,7 +83,7 @@ char	*replace_all_var(t_minishell *minishell, char *line)
 	{
 		if ((line[tab[0]] == '\'' || line[tab[0]] == '\"') && !quote)
 			quote = line[tab[0]];
-		else if (line[tab[0]] == quote && quote)
+		else if (line[tab[0]] == quote)
 			quote = 0;
 		if (line[tab[0]] == '<' && line[tab[0] + 1] == '<' && !quote)
 		{

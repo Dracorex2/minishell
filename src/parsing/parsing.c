@@ -104,6 +104,8 @@ int	ft_parse_segment(t_minishell *minishell, int cmd_idx, char *segment)
 	j = 0;
 	segment = replace_all_var(minishell, segment);
 	segment = handle_redir(minishell, cmd_idx, segment);
+	if (!segment)
+		return (0);
 	ft_malloc_args(minishell, segment, cmd_idx);
 	while (segment[i])
 	{

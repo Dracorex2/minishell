@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norabino <norabino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 18:43:17 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/23 14:41:17 by norabino         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:29:09 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,40 @@ static void	set_redir(t_minishell *minishell, char *redir,
 		readline_heredoc(minishell, redir, cmd_index);
 }
 
+char	*replace_redir(char *seg)
+{
+	int	i;
+	int	tmp;
+
+	i = -1;
+	while (seg[++i])
+	{
+		if (is_redir(&seg[i]))
+		{
+			ft_set_spaces(seg, i - 1, ft_which_redir(seg, &i));
+			tmp = i;
+			free(get_str(seg, &i));
+			ft_set_spaces(seg, tmp, i - tmp + 1);
+			break ;
+		}
+	}
+	return (seg);
+}
+
 void	do_redir(t_minishell *minishell, char **segment, int *i, int cmd_idx)
 {
 	char	*redir;
 	int		which_redir;
-	int		start[2];
+	int		begin_q;
+	int		end_q;
 
-	start[0] = *i;
+	begin_q = 0;
+	end_q = -1;
 	which_redir = ft_which_redir(*segment, i);
-	skip_spaces(*segment, i);
-	start[1] = *i;
 	redir = get_str(*segment, i);
+	redir = get_quotes_index(redir, &begin_q, &end_q);
 	set_redir(minishell, redir, cmd_idx, which_redir);
-	ft_set_spaces(*segment, start[0], is_redir(&(*segment)[start[0]]));
-	ft_set_spaces(*segment, start[1], ft_strlen(redir));
+	*segment = replace_redir(*segment);
 	if (which_redir == 4)
 		free(redir);
 }
@@ -74,17 +94,11 @@ void	do_redir(t_minishell *minishell, char **segment, int *i, int cmd_idx)
 char	*handle_redir(t_minishell *minishell, int cmd_idx, char *segment)
 {
 	int		i;
-	char	quote;
 
 	i = 0;
-	quote = 0;
 	while (segment[i])
 	{
-		if (is_quotes(&segment[i]) && !quote)
-			quote = segment[i];
-		else if (is_quotes(&segment[i]) && quote)
-			quote = 0;
-		if (is_redir(&segment[i]) && !quote)
+		if (is_redir(&segment[i]))
 			do_redir(minishell, &segment, &i, cmd_idx);
 		else
 			i++;

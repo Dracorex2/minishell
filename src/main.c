@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:01:06 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/26 16:09:13 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:41:01 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_minishell	minishell;
 
-	printf("Welcome to MINISHELL\n");
+	//printf("Welcome to MINISHELL\n");
 	(void)argc;
 	(void)argv;
 	handle_sigquit();

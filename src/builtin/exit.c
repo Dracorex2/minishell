@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 18:13:07 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/26 16:53:03 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:47:31 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,6 @@ int	ft_exit(t_minishell *minishell, int idx)
 			write(1, "exit\n", 5);
 		exiting(minishell, exit_code % 256);
 	}
-	write(2, "exit\nexit: too many arguments\n", 30);
+	write(2, "exit\nminishell: exit: too many arguments\n", 41);
 	return (1);
 }
