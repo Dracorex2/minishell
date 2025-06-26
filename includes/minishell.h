@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:42 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/24 17:27:18 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:53:38 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ int		ft_export(t_minishell *minishell, char **args);
 int		ft_env(char **env);
 int		ft_pwd(void);
 void	faild_schr(t_minishell *minishell, int i, char *schr, int idx);
+int		ft_exit_fork(t_minishell *minishell, int idx, int **pipes, int *pid);
 
 //redirect
 int		redirect_input(t_minishell *minishell, int idx);

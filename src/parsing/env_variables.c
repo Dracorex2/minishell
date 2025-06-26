@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:47:02 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/24 17:32:47 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:26:44 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ static char	*get_var(t_minishell *minishell, char *str, int start, int *j)
 	char	*tmp;
 	char	*var;
 
-	if (!str[start] || !ft_is_var(str[start]))
+	if (str[start] && is_quotes(&str[start]))
+		var = NULL;
+	else if (!str[start] || !ft_is_var(str[start]))
 		var = ft_strdup("$");
 	else if (str[start])
 	{
@@ -75,28 +77,27 @@ char	*ft_replace_var(t_minishell *minishell, char *str, int *start, int mod)
 char	*replace_all_var(t_minishell *minishell, char *line)
 {
 	int		tab[3];
+	char	quote;
 
+	quote = 0;
 	ft_bzero((void *)tab, sizeof(int) * 3);
 	while (line && line[tab[0]])
 	{
-		if (line[tab[0]] == '\'' && !tab[1])
-			tab[1] = line[tab[0]];
-		else if (line[tab[0]] == '\'' && tab[1])
-			tab[1] = 0;
-		if (line[tab[0]] == '<' && line[tab[0] + 1] == '<' && !tab[1])
+		if ((line[tab[0]] == '\'' || line[tab[0]] == '\"') && !quote)
+			quote = line[tab[0]];
+		else if (line[tab[0]] == quote && quote)
+			quote = 0;
+		if (line[tab[0]] == '<' && line[tab[0] + 1] == '<' && !quote)
 		{
 			tab[0] += 2;
 			free(get_str(line, &tab[0]));
 		}
-		else if (!tab[1] && line[tab[0]] == '$')
-		{
-			line = ft_replace_var(minishell, line, &tab[0], tab[2]);
-			tab[2] = 1;
-		}
+		else if (quote != '\'' && line[tab[0]] == '$' && ++tab[2])
+			line = ft_replace_var(minishell, line, &tab[0], tab[2] - 1);
 		else
 			tab[0]++;
 	}
-	if (!tab[2])
+	if ((tab[2] - 1) < 0)
 		return (ft_strdup(line));
 	return (line);
 }

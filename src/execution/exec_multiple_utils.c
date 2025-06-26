@@ -49,10 +49,12 @@ void	execute_child(t_minishell *minishell, int **pipes, int idx, int *pid)
 	if (!cmdchr)
 		return (faild_schr(minishell, idx, cmdchr, idx),
 			exit_fail(minishell, pipes, pid, 127));
+	if (ft_strcmp(cmdchr, "exit") == 0)
+		ft_exit_fork(minishell, idx, pipes, pid);
 	ret = execute_builtins(cmdchr, minishell, idx);
 	if (ret == -1)
 		execute_command(cmdchr, minishell, idx);
-	exit(ret);
+	exit_fail(minishell, pipes, pid, ret);
 }
 
 void	wait_all_pid(int *pid, int nb_cmd, int *ret)

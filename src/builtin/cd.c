@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 19:09:32 by lucmansa          #+#    #+#             */
-/*   Updated: 2025/06/24 15:38:23 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:11:49 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_cd(char **argv, t_minishell *minishell)
 {
 	char	*path;
 
-	if (argv[2])
+	if (argv[1] && argv[2])
 		return (write(2, "minishell: cd: too many arguments\n", 34), 1);
 	if (!argv[1])
 	{

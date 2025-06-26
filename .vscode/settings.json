@@ -5,6 +5,7 @@
 		"wait.h": "c",
 		"readline.h": "c",
 		"cstdlib": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"sstream": "c"
 	}
 }

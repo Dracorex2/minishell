@@ -6,7 +6,7 @@
 /*   By: lucmansa <lucmansa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:01:06 by norabino          #+#    #+#             */
-/*   Updated: 2025/06/24 15:42:08 by lucmansa         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:09:13 by lucmansa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ void	ft_minishell(t_minishell minishell)
 			break ;
 		if (*minishell.line)
 		{
+			if (g_sig == SIGINT)
+			{
+				minishell.rt_val = 130;
+				g_sig = 0;
+			}
 			minishell.nb_cmd = ft_nbpipes(minishell.line) + 1;
 			if (!verif_quotes(minishell.line)
 				|| !ft_parse_line(&minishell))
